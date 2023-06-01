@@ -23,7 +23,7 @@ fi
 
 G16ZKEY=./compiled/${FNAME}.zkey
 GENERATE_WITNESS=./compiled/${FNAME}_js/generate_witness.js
-INPUT=./tests/$FNAME.json
+INPUT=./contracts/$FNAME.json
 POT=./pot/pot.ptau
 PROOF=./compiled/${FNAME}_proof.json
 PUBLIC=./compiled/${FNAME}_public.json

@@ -1,5 +1,5 @@
 {
-  "solidity.packageDefaultDependenciesDirectory": "./tests/node_modules",
+  "solidity.packageDefaultDependenciesDirectory": "./contracts/node_modules",
   "solidity.compileUsingRemoteVersion": "latest",
   "vue.features.codeActions.enable": false
 }
