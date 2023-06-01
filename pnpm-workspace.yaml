@@ -1,4 +1,5 @@
 packages:
   - "tests"
   - "sdk"
-  - "examples/*"
+  - "wallet"
+  - "circuits"
