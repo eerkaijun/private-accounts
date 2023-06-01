@@ -2,7 +2,6 @@
 
 # Ideally we would expose a cli that built circuits and managed this
 mkdir -p ./public/circuits
-mkdir -p ./contracts
 cp -r ../circuits/compiled/transaction* ./public/circuits
 cp ../contracts/artifacts/contracts/mocks/MockErc20.sol/MockErc20.json ./contracts/
 cp ../contracts/artifacts/contracts/MultiAssetShieldedPool.sol/MultiAssetShieldedPool.json ./contracts/
