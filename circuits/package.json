@@ -10,7 +10,7 @@
     "build": "./scripts/build.sh",
     "postinstall": "./scripts/install.sh",
     "clean": "./scripts/clean.sh",
-    "test": "pnpm build && ./scripts/test_circuit.sh transaction"
+    "test": "pnpm build && ./scripts/g16_test_circuit.sh transaction"
   },
   "keywords": [],
   "author": "",
