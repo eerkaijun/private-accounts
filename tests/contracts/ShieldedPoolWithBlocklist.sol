@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.0;
 
-import {CompliantVerifier} from "./generated/CompliantVerifier.sol";
+import {CompliantVerifier} from "@zrclib/circuits/generated/CompliantVerifier.sol";
 import {AbstractShieldedPool} from "./AbstractShieldedPool.sol";
-import {MerkleTreeWithHistory} from "./MerkleTreeWithHistory.sol";
-import {MerkleTreeForBlocklist} from "./MerkleTreeForBlocklist.sol";
+import {MerkleTreeWithHistory} from "./merkle/MerkleTreeWithHistory.sol";
+import {MerkleTreeForBlocklist} from "./merkle/MerkleTreeForBlocklist.sol";
 import {SwapExecutor} from "./SwapExecutor.sol";
 
 contract ShieldedPoolWithBlocklist is AbstractShieldedPool {

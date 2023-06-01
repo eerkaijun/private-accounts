@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import {BlocklistVerifier} from "./generated/BlocklistVerifier.sol";
+import {BlocklistVerifier} from "@zrclib/circuits/generated/BlocklistVerifier.sol";
 
 contract MerkleTreeForBlocklist {
 

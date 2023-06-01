@@ -2,6 +2,6 @@
 
 pragma solidity ^0.8.0;
 
-import {CompliantVerifier} from "@zrclib/sdk/contracts/generated/CompliantVerifier.sol";
+import {CompliantVerifier} from "@zrclib/circuits/generated/CompliantVerifier.sol";
 
 contract CompliantTransactionVerifier is CompliantVerifier {}

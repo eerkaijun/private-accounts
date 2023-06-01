@@ -16,6 +16,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@openzeppelin/contracts": "^4.8.3",
     "@zrclib/sdk": "workspace:*",
+    "@zrclib/circuits": "workspace:*",
     "circomlibjs": "^0.1.7",
     "dotenv": "^16.0.3",
     "eth-sig-util": "^3.0.1",

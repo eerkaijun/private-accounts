@@ -1,5 +1,5 @@
 packages:
-  # - "tests"
   # - "wallet"
   - "circuits"
   - "sdk"
+  - "tests"

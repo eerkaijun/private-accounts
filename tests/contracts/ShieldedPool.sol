@@ -2,9 +2,9 @@
 
 pragma solidity ^0.8.0;
 
-import {TransactionVerifier} from "./generated/TransactionVerifier.sol";
+import {TransactionVerifier} from "@zrclib/circuits/generated/TransactionVerifier.sol";
 import {AbstractShieldedPool} from "./AbstractShieldedPool.sol";
-import {MerkleTreeWithHistory} from "./MerkleTreeWithHistory.sol";
+import {MerkleTreeWithHistory} from "./merkle/MerkleTreeWithHistory.sol";
 import {SwapExecutor} from "./SwapExecutor.sol";
 
 contract ShieldedPool is AbstractShieldedPool {
