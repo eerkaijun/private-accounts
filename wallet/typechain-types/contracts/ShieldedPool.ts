@@ -107,7 +107,7 @@ export declare namespace AbstractShieldedPool {
   };
 }
 
-export interface MultiAssetShieldedPoolInterface extends utils.Interface {
+export interface ShieldedPoolInterface extends utils.Interface {
   functions: {
     "FIELD_SIZE()": FunctionFragment;
     "MAX_EXT_AMOUNT()": FunctionFragment;
@@ -310,12 +310,12 @@ export type NewNullifierEvent = TypedEvent<[string], NewNullifierEventObject>;
 
 export type NewNullifierEventFilter = TypedEventFilter<NewNullifierEvent>;
 
-export interface MultiAssetShieldedPool extends BaseContract {
+export interface ShieldedPool extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MultiAssetShieldedPoolInterface;
+  interface: ShieldedPoolInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

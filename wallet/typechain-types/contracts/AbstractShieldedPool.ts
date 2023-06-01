@@ -107,7 +107,7 @@ export declare namespace AbstractShieldedPool {
   };
 }
 
-export interface MultiAssetShieldedPoolInterface extends utils.Interface {
+export interface AbstractShieldedPoolInterface extends utils.Interface {
   functions: {
     "FIELD_SIZE()": FunctionFragment;
     "MAX_EXT_AMOUNT()": FunctionFragment;
@@ -128,7 +128,6 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
     "swapExecutor()": FunctionFragment;
     "transact(((bytes,bytes32,bytes32[2],bytes32[2],uint256,address,bytes32),(address,int256,bytes,bytes,address,uint256,address,address,bytes,bytes)))": FunctionFragment;
     "transactAndSwap(((bytes,bytes32,bytes32[2],bytes32[2],uint256,address,bytes32),(address,int256,bytes,bytes,address,uint256,address,address,bytes,bytes)))": FunctionFragment;
-    "verifier()": FunctionFragment;
     "zeros(uint256)": FunctionFragment;
   };
 
@@ -153,7 +152,6 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
       | "swapExecutor"
       | "transact"
       | "transactAndSwap"
-      | "verifier"
       | "zeros"
   ): FunctionFragment;
 
@@ -224,7 +222,6 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
     functionFragment: "transactAndSwap",
     values: [AbstractShieldedPool.ProofStruct]
   ): string;
-  encodeFunctionData(functionFragment: "verifier", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "zeros",
     values: [PromiseOrValue<BigNumberish>]
@@ -279,7 +276,6 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
     functionFragment: "transactAndSwap",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "verifier", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "zeros", data: BytesLike): Result;
 
   events: {
@@ -310,12 +306,12 @@ export type NewNullifierEvent = TypedEvent<[string], NewNullifierEventObject>;
 
 export type NewNullifierEventFilter = TypedEventFilter<NewNullifierEvent>;
 
-export interface MultiAssetShieldedPool extends BaseContract {
+export interface AbstractShieldedPool extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MultiAssetShieldedPoolInterface;
+  interface: AbstractShieldedPoolInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -413,8 +409,6 @@ export interface MultiAssetShieldedPool extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    verifier(overrides?: CallOverrides): Promise<[string]>;
-
     zeros(
       i: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -497,8 +491,6 @@ export interface MultiAssetShieldedPool extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  verifier(overrides?: CallOverrides): Promise<string>;
-
   zeros(
     i: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -580,8 +572,6 @@ export interface MultiAssetShieldedPool extends BaseContract {
       _proof: AbstractShieldedPool.ProofStruct,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    verifier(overrides?: CallOverrides): Promise<string>;
 
     zeros(
       i: PromiseOrValue<BigNumberish>,
@@ -676,8 +666,6 @@ export interface MultiAssetShieldedPool extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    verifier(overrides?: CallOverrides): Promise<BigNumber>;
-
     zeros(
       i: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -750,8 +738,6 @@ export interface MultiAssetShieldedPool extends BaseContract {
       _proof: AbstractShieldedPool.ProofStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
-
-    verifier(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     zeros(
       i: PromiseOrValue<BigNumberish>,

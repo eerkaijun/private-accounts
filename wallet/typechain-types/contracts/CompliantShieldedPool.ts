@@ -107,12 +107,13 @@ export declare namespace AbstractShieldedPool {
   };
 }
 
-export interface MultiAssetShieldedPoolInterface extends utils.Interface {
+export interface CompliantShieldedPoolInterface extends utils.Interface {
   functions: {
     "FIELD_SIZE()": FunctionFragment;
     "MAX_EXT_AMOUNT()": FunctionFragment;
     "ROOT_HISTORY_SIZE()": FunctionFragment;
     "ZERO_VALUE()": FunctionFragment;
+    "blocklistTree()": FunctionFragment;
     "currentRootIndex()": FunctionFragment;
     "filledSubtrees(uint256)": FunctionFragment;
     "getLastRoot()": FunctionFragment;
@@ -138,6 +139,7 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
       | "MAX_EXT_AMOUNT"
       | "ROOT_HISTORY_SIZE"
       | "ZERO_VALUE"
+      | "blocklistTree"
       | "currentRootIndex"
       | "filledSubtrees"
       | "getLastRoot"
@@ -171,6 +173,10 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "ZERO_VALUE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "blocklistTree",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -241,6 +247,10 @@ export interface MultiAssetShieldedPoolInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "ZERO_VALUE", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "blocklistTree",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "currentRootIndex",
     data: BytesLike
   ): Result;
@@ -310,12 +320,12 @@ export type NewNullifierEvent = TypedEvent<[string], NewNullifierEventObject>;
 
 export type NewNullifierEventFilter = TypedEventFilter<NewNullifierEvent>;
 
-export interface MultiAssetShieldedPool extends BaseContract {
+export interface CompliantShieldedPool extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MultiAssetShieldedPoolInterface;
+  interface: CompliantShieldedPoolInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -344,6 +354,8 @@ export interface MultiAssetShieldedPool extends BaseContract {
     ROOT_HISTORY_SIZE(overrides?: CallOverrides): Promise<[number]>;
 
     ZERO_VALUE(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    blocklistTree(overrides?: CallOverrides): Promise<[string]>;
 
     currentRootIndex(overrides?: CallOverrides): Promise<[number]>;
 
@@ -429,6 +441,8 @@ export interface MultiAssetShieldedPool extends BaseContract {
 
   ZERO_VALUE(overrides?: CallOverrides): Promise<BigNumber>;
 
+  blocklistTree(overrides?: CallOverrides): Promise<string>;
+
   currentRootIndex(overrides?: CallOverrides): Promise<number>;
 
   filledSubtrees(
@@ -512,6 +526,8 @@ export interface MultiAssetShieldedPool extends BaseContract {
     ROOT_HISTORY_SIZE(overrides?: CallOverrides): Promise<number>;
 
     ZERO_VALUE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    blocklistTree(overrides?: CallOverrides): Promise<string>;
 
     currentRootIndex(overrides?: CallOverrides): Promise<number>;
 
@@ -618,6 +634,8 @@ export interface MultiAssetShieldedPool extends BaseContract {
 
     ZERO_VALUE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    blocklistTree(overrides?: CallOverrides): Promise<BigNumber>;
+
     currentRootIndex(overrides?: CallOverrides): Promise<BigNumber>;
 
     filledSubtrees(
@@ -692,6 +710,8 @@ export interface MultiAssetShieldedPool extends BaseContract {
     ROOT_HISTORY_SIZE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ZERO_VALUE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    blocklistTree(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     currentRootIndex(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
