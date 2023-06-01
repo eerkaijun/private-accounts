@@ -1,6 +1,6 @@
-import { Utxo } from "./utxo";
-import { Keypair } from "./keypair";
-import { ensurePoseidon } from "./poseidon";
+import { Utxo } from "../src/utxo";
+import { Keypair } from "../src/keypair";
+import { ensurePoseidon } from "../src/poseidon";
 
 test("Keypair", async () => {
   // const hashFn = buildPoseidon();

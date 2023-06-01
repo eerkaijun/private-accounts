@@ -11,8 +11,7 @@
     "esModuleInterop": false,
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "."
   },
-  "include": ["./src/**/*.ts"]
-  // "exclude": ["./src/**/*.test.ts"]
+  "include": ["./src", "./tests"],
 }

@@ -1,12 +1,12 @@
 import { BigNumber } from "ethers";
-import { AccountStore } from "../store/account_store";
-import { PasswordEncryptor } from "../password_encryptor";
-import { Utxo, printIntArray } from "../utxo";
-import { Keypair } from "../keypair";
-import { fieldToString } from "../poseidon";
-import { toFixedHex } from "../utils";
-import { deleteDB } from "../test_utils";
-import { EncryptedDb, getDbName } from "./db";
+import { AccountStore } from "../src/store/account_store";
+import { PasswordEncryptor } from "../src/password_encryptor";
+import { Utxo, printIntArray } from "../src/utxo";
+import { Keypair } from "../src/keypair";
+import { fieldToString } from "../src/poseidon";
+import { toFixedHex } from "../src/utils";
+import { deleteDB } from "../src/test_utils";
+import { EncryptedDb, getDbName } from "../src/store/db";
 
 jest.setTimeout(10000);
 describe("AccountStore", () => {

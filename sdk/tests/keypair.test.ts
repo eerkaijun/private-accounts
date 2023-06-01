@@ -1,4 +1,4 @@
-import { Keypair, KeypairSerializer } from "./keypair";
+import { Keypair, KeypairSerializer } from "../src/keypair";
 
 test("keypair", async () => {
   const keypair = await Keypair.generate();

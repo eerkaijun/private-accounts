@@ -1,6 +1,6 @@
-import { IndexDbStore } from "../store/index_db_store";
+import { IndexDbStore } from "../src/store/index_db_store";
 import { indexedDB } from "fake-indexeddb";
-import { deleteDB } from "../test_utils";
+import { deleteDB } from "../src/test_utils";
 
 describe("IndexDbStore", () => {
   const tableName = "testStore";

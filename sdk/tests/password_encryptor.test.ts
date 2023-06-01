@@ -3,7 +3,7 @@ import {
   decrypt,
   generateKeyFromPassword,
   PasswordEncryptor,
-} from "./password_encryptor";
+} from "../src/password_encryptor";
 
 test("hello", async () => {
   const password = "your-password-here";

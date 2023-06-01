@@ -1,4 +1,4 @@
-import { InMemoryStore } from "./in_memory_store";
+import { InMemoryStore } from "../src/store/in_memory_store";
 
 describe("InMemoryStore", () => {
   let store: InMemoryStore<string>;

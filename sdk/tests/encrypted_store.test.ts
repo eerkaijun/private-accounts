@@ -1,9 +1,9 @@
 import { BigNumber } from "ethers";
-import { EncryptedStore } from "../store/encrypted_store";
-import { InMemoryStore } from "./in_memory_store";
-import { PasswordEncryptor } from "../password_encryptor";
-import { Utxo, UtxoSerializer } from "../utxo";
-import { JSONSerializer } from "../serializer";
+import { EncryptedStore } from "../src/store/encrypted_store";
+import { InMemoryStore } from "../src/store/in_memory_store";
+import { PasswordEncryptor } from "../src/password_encryptor";
+import { Utxo, UtxoSerializer } from "../src/utxo";
+import { JSONSerializer } from "../src/serializer";
 
 describe("EncryptedStore", () => {
   let encryptedStore: EncryptedStore<object>;
