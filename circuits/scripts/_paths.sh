@@ -14,7 +14,7 @@ fi
 
 FNAME_CAPS=$(capitalize $FNAME)
 
-CIRCUIT=./circuits/$FNAME.circom
+CIRCUIT=./src/$FNAME.circom
 
 if [ ! -f "$CIRCUIT" ]; then
   echo "$CIRCUIT must exist."
@@ -28,11 +28,11 @@ POT=./pot/pot.ptau
 PROOF=./compiled/${FNAME}_proof.json
 PUBLIC=./compiled/${FNAME}_public.json
 R1CS=./compiled/$FNAME.r1cs
-SOL_VERIFIER=./contracts/generated/${FNAME_CAPS}Verifier.sol
+SOL_VERIFIER=./generated/${FNAME_CAPS}Verifier.sol
 VKEY=./compiled/${FNAME}_verification_key.json
 WASM=./compiled/${FNAME}_js/$FNAME.wasm
 WITNESS=./compiled/$FNAME.wtns
 ZKEY=./compiled/${FNAME}.zkey
 
 mkdir -p ./compiled
-mkdir -p ./contracts/generated
+mkdir -p ./generated

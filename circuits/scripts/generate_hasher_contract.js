@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const { poseidonContract: poseidonGenContract } = require("circomlibjs");
-const outputPath = path.join(__dirname, '..', 'contracts', 'generated');
+const outputPath = path.join(__dirname, '..', 'generated');
 const outputFile = path.join(outputPath, 'Hasher.json');
 
 const contract = {
     _format: 'hh-sol-artifact-1',
-    sourceName: 'contracts/Hasher.sol',
+    sourceName: 'Hasher.sol',
     linkReferences: {},
     deployedLinkReferences: {},
     contractName: 'Hasher',
