@@ -1,0 +1,25 @@
+{
+  "name": "circuits",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "files": [
+    "**/*.sol"
+  ],
+  "scripts": {
+    "build": "./scripts/build.sh",
+    "postinstall": "./scripts/install.sh",
+    "clean": "./scripts/clean.sh",
+    "test": "pnpm build && ./scripts/test_circuit.sh transaction"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "circomlibjs": "^0.1.7",
+    "snarkjs": "^0.6.10"
+  },
+  "devDependencies": {
+    "circomlib": "^2.0.5"
+  }
+}

@@ -6,16 +6,11 @@
   "module": "dist/index.mjs",
   "types": "src/index.ts",
   "files": [
-    "**/*.sol",
     "dist"
   ],
   "scripts": {
-    "build": "./scripts/build.sh",
     "dev": "tsc --watch",
-    "postinstall": "./scripts/install.sh",
-    "clean": "./scripts/clean.sh",
-    "test": "jest",
-    "test-circuit": "pnpm build && ./scripts/test_circuit.sh transaction"
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -42,7 +37,6 @@
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-typescript": "^11.1.0",
     "@types/jest": "^29.5.0",
-    "circomlib": "^2.0.5",
     "fake-indexeddb": "^4.0.1",
     "jest": "^29.5.0",
     "rollup": "^3.20.4",
