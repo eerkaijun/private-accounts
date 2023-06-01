@@ -13,6 +13,6 @@ echo "=========================================="
 snarkjs groth16 setup $R1CS $POT $G16ZKEY
 
 echo ""
-echo "Export plonk verifier..."
+echo "Export g16 verifier..."
 echo "=========================================="
 snarkjs zkey export solidityverifier $G16ZKEY $SOL_VERIFIER

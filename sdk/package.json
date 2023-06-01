@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "build": "./scripts/build.sh",
     "dev": "tsc --watch",
     "test": "jest"
   },

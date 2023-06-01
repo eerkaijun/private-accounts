@@ -8,4 +8,3 @@ if [ -z "$SKIP_CIRCOM" ]; then
   node ./scripts/g16_process_output.js
   node ./scripts/generate_hasher_contract.js
 fi
-pnpm tsc
