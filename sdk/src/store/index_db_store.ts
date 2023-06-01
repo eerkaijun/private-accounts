@@ -45,7 +45,6 @@ export class IndexDbStore<T extends object | string | number | boolean>
   ) {}
 
   async add(id: string, data: T): Promise<boolean> {
-    // console.log("-add");
     const db = await this.getDb();
     const tx = db.transaction(this.table, "readwrite");
     const store = tx.objectStore(this.table);
@@ -55,7 +54,7 @@ export class IndexDbStore<T extends object | string | number | boolean>
       await promisifyDbTransaction(tx, request, "add");
       return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false;
     } finally {
       db.close();
@@ -63,7 +62,6 @@ export class IndexDbStore<T extends object | string | number | boolean>
   }
 
   async get(id: string): Promise<T | undefined> {
-    // console.log("-get");
     const db = await this.getDb();
     const tx = db.transaction(this.table, "readonly");
     const store = tx.objectStore(this.table);
@@ -78,7 +76,7 @@ export class IndexDbStore<T extends object | string | number | boolean>
       const { data } = response;
       return data;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return undefined;
     } finally {
       db.close();
@@ -86,8 +84,6 @@ export class IndexDbStore<T extends object | string | number | boolean>
   }
 
   async getAll(): Promise<T[]> {
-    // console.log("-getAll");
-
     const db = await this.getDb();
     const tx = db.transaction(this.table, "readonly");
     const store = tx.objectStore(this.table);
@@ -102,7 +98,7 @@ export class IndexDbStore<T extends object | string | number | boolean>
       allData.push(...sortByNonce(data).map(({ data }) => data));
       return allData;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return [];
     } finally {
       db.close();
@@ -110,7 +106,6 @@ export class IndexDbStore<T extends object | string | number | boolean>
   }
 
   async remove(id: string): Promise<boolean> {
-    // console.log("-remove");
     const db = await this.getDb();
     const tx = db.transaction(this.table, "readwrite");
     const store = tx.objectStore(this.table);
@@ -119,7 +114,7 @@ export class IndexDbStore<T extends object | string | number | boolean>
       await promisifyDbTransaction(tx, request);
       return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false;
     } finally {
       db.close();
@@ -127,7 +122,6 @@ export class IndexDbStore<T extends object | string | number | boolean>
   }
 
   async removeAll(): Promise<boolean> {
-    // console.log("-removeAll");
     const db = await this.getDb();
     const tx = db.transaction(this.table, "readwrite");
     const store = tx.objectStore(this.table);
@@ -136,7 +130,7 @@ export class IndexDbStore<T extends object | string | number | boolean>
       await promisifyDbTransaction(tx, request);
       return true;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return false;
     } finally {
       db.close();

@@ -6,7 +6,7 @@ import {
   SwapExecutor__factory,
   MockSwapRouter__factory,
 } from "../typechain-types";
-import artifact from "@zrclib/sdk/contracts/generated/Hasher.json";
+import artifact from "@zrclib/circuits/generated/Hasher.json";
 
 async function deploySwapRouter() {
     // Prepare signers

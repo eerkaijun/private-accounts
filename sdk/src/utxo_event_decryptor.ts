@@ -50,7 +50,6 @@ class TaskQueue {
   private waitForTasks: ResolvablePromise<void> = new ResolvablePromise();
 
   public add(task: () => Promise<void>): void {
-    console.log("adding task: ", task);
     this.queue.push(task);
     this.runTasks();
   }
@@ -120,7 +119,6 @@ export class UtxoEventDecryptor {
       encryptedOutput: string,
       event: ethers.Event
     ) => {
-      console.log("=commitmentHandler=");
       this.runIfUniqueEvent(event, async () => {
         const utxo = attemptUtxoDecryption(this.keypair, {
           type: "NewCommitment",
@@ -130,15 +128,14 @@ export class UtxoEventDecryptor {
         });
 
         if (utxo) {
-          console.log(
-            `Received Utxo {amount:${utxo.amount},asset:${utxo.asset},pubkey:${utxo.keypair.pubkey},${utxo.blinding}}`
-          );
+          // console.log(
+          //   `Received Utxo {amount:${utxo.amount},asset:${utxo.asset},pubkey:${utxo.keypair.pubkey},${utxo.blinding}}`
+          // );
           this.handleUtxo(utxo, event.blockNumber);
         }
       });
     };
     const nullifierHandler = async (nullifier: string, event: ethers.Event) => {
-      console.log("=nullifierHandler=");
       this.runIfUniqueEvent(event, async () => {
         await this.handleNullifier(nullifier, event.blockNumber);
       });
@@ -154,17 +151,17 @@ export class UtxoEventDecryptor {
 
     for (let event of nullifierEvents) {
       if (!isNullifierEvent(event)) throw new Error("BAD_EVENT_FORMAT");
-      console.log(
-        "Processing historical nullifierEvent: " + event.args.nullifier
-      );
+      // console.log(
+      //   "Processing historical nullifierEvent: " + event.args.nullifier
+      // );
       await nullifierHandler(event.args.nullifier, event);
     }
 
     for (let event of commitmentEvents) {
       if (!isCommitmentEvent(event)) throw new Error("BAD_EVENT_FORMAT");
-      console.log(
-        "Processing historical commitmentEvent: " + event.args.commitment
-      );
+      // console.log(
+      //   "Processing historical commitmentEvent: " + event.args.commitment
+      // );
       await commitmentHandler(
         event.args.commitment,
         event.args.index,
@@ -173,7 +170,6 @@ export class UtxoEventDecryptor {
       );
     }
 
-    console.log("starting listeners");
     this.contract.on("NewCommitment", commitmentHandler);
     this.contract.on("NewNullifier", nullifierHandler);
 
@@ -187,29 +183,22 @@ export class UtxoEventDecryptor {
   }
 
   public onUtxo(handler: UtxoHandler) {
-    // console.log("onUtxo registering handler ");
     this.handleUtxo = handler;
   }
   public onNullifier(handler: NullifierHandler) {
-    // console.log("onNullifier registering handler ");
     this.handleNullifier = handler;
   }
 
   private runIfUniqueEvent(event: ethers.Event, task: () => Promise<void>) {
-    console.log("runIfUniqueEvent");
     const hash = hashEvent(event);
-    console.log({ hash });
     if (this.cache.has(hash)) {
-      console.log("Rejecting because event has already been seen");
       return;
     }
-    console.log("cache miss running fn");
     this.cache.add(hash);
     this.tasks.add(task);
   }
 
   waitForAllHandlers() {
-    console.log(this.tasks.queue.length);
     return this.tasks.wait();
   }
 

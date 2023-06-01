@@ -93,8 +93,6 @@ export async function getProof({
       inputMerklePathElements.push(new Array(tree.levels).fill(0));
     }
   }
-  console.log("getProof> transactData", transactData);
-  // console.log("getProof> transactData", transactData.toHexString());
   const extData = {
     recipient: toFixedHex(recipient, 20),
     extAmount: toFixedHex(extAmount),
@@ -107,7 +105,6 @@ export async function getProof({
     swapData: toFixedHex(swapData),
     transactData: transactData,
   };
-  console.log("getProof> extData", extData);
 
   // Check if extAmount is not zero
   let publicAsset: BigNumber = BigNumber.from(0); // default to zero

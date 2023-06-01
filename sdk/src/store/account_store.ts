@@ -60,11 +60,8 @@ export class AccountStore {
     const results: Utxo[] = [];
     let total = BigNumber.from(0);
     for (const note of unspent) {
-      // console.log(`total before:` + total.toString());
       total = total.add(note.amount);
-      // console.log(`total after:` + total.toString());
       results.push(note);
-      // console.log(results.length);
       if (total.gte(amount)) break;
     }
     if (total.lt(amount)) {

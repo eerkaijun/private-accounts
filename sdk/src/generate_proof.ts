@@ -6,9 +6,6 @@ import { AbiCoder } from "ethers/lib/utils";
 export async function generatePlonkProof(inputs: object, circuitName: string = "transaction") {
   const wasmLocation = getWasmFileLocation(circuitName);
   const zkeyLocation = getZkeyFileLocation(circuitName);
-  console.log("=generatePlonkProof=========");
-  console.log(JSON.stringify(inputs));
-  console.log("/generatePlonkProof=========");
   const { proof } = await plonk.fullProve(inputs, wasmLocation, zkeyLocation);
   const calldata: string = await plonk.exportSolidityCallData(proof, []);
   // Calldata comes with the inputs added at the end
@@ -19,9 +16,6 @@ export async function generatePlonkProof(inputs: object, circuitName: string = "
 export async function generateGroth16Proof(inputs: object, circuitName: string = "transaction") {
   const wasmLocation = getWasmFileLocation(circuitName);
   const zkeyLocation = getZkeyFileLocation(circuitName);
-  console.log("=generateGroth16Proof=========");
-  console.log(JSON.stringify(inputs));
-  console.log("/generateGroth16Proof=========");
   const { proof } = await groth16.fullProve(inputs, wasmLocation, zkeyLocation);
   const abi = new AbiCoder();
 
@@ -41,7 +35,6 @@ export async function generateGroth16Proof(inputs: object, circuitName: string =
     ["uint", "uint", "uint", "uint", "uint", "uint", "uint", "uint"],
     nums
   );
-  console.log({ p, nums });
   return p;
 }
 

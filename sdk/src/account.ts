@@ -47,29 +47,28 @@ export class Account extends TypedEventTarget<AccountEventMap> {
   async login() {
     try {
       const { encryptor, contract, chainId } = this;
-      console.log("login(): Extract data", { encryptor, contract, chainId });
+      // console.log("login(): Extract data", { encryptor, contract, chainId });
       const address = await this.getEthAddress();
       const keypair = await this.getLocalOrSignedKeypair();
-      console.log("login(): Keypair and address", { address, keypair });
+      // console.log("login(): Keypair and address", { address, keypair });
       const db = await EncryptedDb.create(encryptor, chainId);
       const store = new AccountStore(db);
       const storeKeypair = await store.getKeypair(address);
-      console.log("login(): storeKeypair", { storeKeypair });
+      // console.log("login(): storeKeypair", { storeKeypair });
       if (!storeKeypair) {
         await store.setKeypair(address, keypair);
-        console.log("login(): storeKeypair has been set");
+        // console.log("login(): storeKeypair has been set");
       }
-      console.log("login(): creating UtxoEventDecryptor");
+      // console.log("login(): creating UtxoEventDecryptor");
       const decryptor = new UtxoEventDecryptor(contract, keypair);
-      console.log("login(): creating EventStoreWriter");
+      // console.log("login(): creating EventStoreWriter");
       const eventStoreWriter = new EventStoreWriter(store, decryptor);
-      console.log("login(): EventStoreWriter.start()");
+      // console.log("login(): EventStoreWriter.start()");
       await eventStoreWriter.start();
-      console.log("login(): storing data");
+      // console.log("login(): storing data");
       this.keypair = keypair;
       this.store = store;
       this.eventStoreWriter = eventStoreWriter;
-      console.log("this.keypair:" + this.keypair);
       this.listenForBlocks();
       this.dispatchTypedEvent("loggedIn", new Event("loggedIn"));
     } catch (err) {
@@ -131,7 +130,6 @@ export class Account extends TypedEventTarget<AccountEventMap> {
     if (this.keypair) {
       return this.keypair;
     }
-    console.log("User not logged in");
     throw new Error("USER_NOT_LOGGED_IN");
   }
 
@@ -169,7 +167,6 @@ export class Account extends TypedEventTarget<AccountEventMap> {
     },
     checkBlocklist = false
   ) {
-    console.log("proveShield", JSON.stringify({ amount, asset, swapParams }));
     return await this.getProver().shield(
       amount,
       asset,
@@ -192,10 +189,6 @@ export class Account extends TypedEventTarget<AccountEventMap> {
     },
     checkBlocklist = false
   ) {
-    console.log(
-      "proveUnshield",
-      JSON.stringify({ amount, recipient, asset, swapParams })
-    );
     return await this.getProver().unshield(
       amount,
       recipient,

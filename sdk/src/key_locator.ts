@@ -15,7 +15,7 @@ export const isWebWorker =
 export function getWasmFileLocation(circuitName: string) {
   const base = `/${circuitName}_js/${circuitName}.wasm`;
   if (isNode && !isWebWorker) {
-    return require("path").resolve(__dirname, `../compiled${base}`);
+    return require("path").resolve(__dirname, `../../circuits/compiled${base}`);
   }
   return `/circuits${base}`;
 }
@@ -23,7 +23,7 @@ export function getWasmFileLocation(circuitName: string) {
 export function getZkeyFileLocation(circuitName: string) {
   const base = `/${circuitName}.zkey`;
   if (isNode && !isWebWorker) {
-    return require("path").resolve(__dirname, `../compiled${base}`);
+    return require("path").resolve(__dirname, `../../circuits/compiled${base}`);
   }
   return `/circuits${base}`;
 }

@@ -67,7 +67,6 @@ describe("AccountStore", () => {
       printIntArray(u.getCommitment())
     );
 
-    // console.log(resultCommitments);
     expect(resultCommitments).toEqual([printedUintArr[0], printedUintArr[1]]);
   });
 

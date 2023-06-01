@@ -10,8 +10,7 @@ import {
   SwapExecutor__factory,
   MockSwapRouter__factory,
 } from "../typechain-types";
-import { expect } from "chai";
-import artifact from "@zrclib/sdk/contracts/generated/Hasher.json";
+import artifact from "@zrclib/circuits/generated/Hasher.json";
 import { FormattedProof } from "@zrclib/sdk/src/types";
 import { sleep, tend, time, waitUntil } from "../utils";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
@@ -73,7 +72,6 @@ function encodeData(proof: FormattedProof) {
     ],
     [proof.proofArguments, proof.extData]
   );
-  console.log("encodeData> encoded: ", encoded);
   return encoded;
 }
 
@@ -155,10 +153,6 @@ it("Test swap", async function () {
     tokenB.address,
     FIVE,
   ]);
-  console.log(
-    "swap.test> transactData: ",
-    proof.extData.transactData.toString()
-  );
   proof = await alice.proveUnshield(
     FIVE,
     swapExecutor.address,
@@ -173,7 +167,6 @@ it("Test swap", async function () {
     }
   );
   tend(t);
-  console.log("swap.test> proof: ", proof);
 
   t = time("Alice submits transaction");
   tx = await contract.transactAndSwap(proof);

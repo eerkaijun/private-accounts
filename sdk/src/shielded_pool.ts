@@ -37,7 +37,6 @@ export class ShieldedPoolProver {
     }
 
     const deposit = this.account.createUtxo(amount, asset);
-    // console.log("after utxo");
     const proof = await prepareTransaction({
       asset: BigNumber.from(asset),
       outputs: [deposit],

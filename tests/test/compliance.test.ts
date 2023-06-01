@@ -9,7 +9,7 @@ import {
   SwapExecutor__factory,
 } from "../typechain-types";
 import { Account } from "@zrclib/sdk";
-import artifact from "@zrclib/sdk/contracts/generated/Hasher.json";
+import artifact from "@zrclib/circuits/generated/Hasher.json";
 import { toFixedHex } from "@zrclib/sdk";
 import { fieldToString, poseidonHash } from "@zrclib/sdk/src/poseidon";
 import { generateGroth16Proof } from "@zrclib/sdk";

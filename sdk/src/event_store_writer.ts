@@ -12,13 +12,11 @@ export class EventStoreWriter {
     private utxoEventDecryptor: UtxoEventDecryptor
   ) {
     this.utxoEventDecryptor.onUtxo(async (utxo, blockheight) => {
-      console.log("onUtxo()");
       await this.store.setLatestBlock(blockheight);
       await this.store.addUtxo(utxo);
     });
 
     this.utxoEventDecryptor.onNullifier(async (nullifier, blockheight) => {
-      console.log("onNullifier", nullifier);
       await this.store.setLatestBlock(blockheight);
       await this.store.addNullifier(nullifier);
     });
