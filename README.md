@@ -2,7 +2,7 @@
 
 ## Mission
 
-To bring zero knowledge privacy primitives to all web3 developers.
+To bring privacy to EVM chains.
 
 ## Disclaimer
 
