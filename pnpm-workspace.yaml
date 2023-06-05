@@ -1,5 +1,5 @@
 packages:
   - "circuits"
   - "sdk"
-  # - "contracts"
-  # - "wallet"
+  - "contracts"
+  - "wallet"

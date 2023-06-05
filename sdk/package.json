@@ -2,14 +2,15 @@
   "name": "@zrclib/sdk",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "dist/src/index.js",
+  "module": "dist/src/index.mjs",
   "types": "src/index.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "./scripts/build.sh",
+    "clean": "./scripts/clean.sh",
     "dev": "tsc --watch",
     "test": "jest"
   },
