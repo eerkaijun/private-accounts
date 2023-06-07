@@ -9,6 +9,7 @@ import type * as verifiers from "./verifiers";
 export type { verifiers };
 export type { AbstractShieldedPool } from "./AbstractShieldedPool";
 export type { Blocklist } from "./Blocklist";
+export type { BurnerAccount } from "./BurnerAccount";
 export type { CompliantShieldedPool } from "./CompliantShieldedPool";
 export type { MultiAssetShieldedPool } from "./MultiAssetShieldedPool";
 export type { ShieldedPool } from "./ShieldedPool";
