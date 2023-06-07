@@ -7,18 +7,20 @@ pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
-
 import "@account-abstraction/contracts/core/BaseAccount.sol";
+
+import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
 
 contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     bytes32 public hashedSecret;
 
     IEntryPoint private immutable _entryPoint;
+    AuthenticationVerifier private _verifier;
 
     event BurnerAccountInitialized(IEntryPoint indexed entryPoint, bytes32 indexed hashedSecret);
 
-    modifier onlyOwner() {
-        _onlyOwner();
+    modifier onlyOwner(bytes memory proof) {
+        _onlyOwner(proof);
         _;
     }
 
@@ -27,17 +29,22 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
         return _entryPoint;
     }
 
-
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    constructor(IEntryPoint anEntryPoint) {
+    constructor(IEntryPoint anEntryPoint, address verifierAddress) {
         _entryPoint = anEntryPoint;
+        _verifier = AuthenticationVerifier(verifierAddress);
         _disableInitializers();
     }
 
-    function _onlyOwner() internal view {
+    function _onlyOwner(bytes memory proof) internal view {
         // TODO: add a zk proof that the user has the secret to the hashedSecret
+        uint[2] memory pubSignals = [
+            uint(getNonce()),
+            uint(hashedSecret)
+        ];
+        require(_verifier.verifyGroth16Proof(proof, pubSignals), "Sender not account owner");
     }
 
     /**
@@ -76,9 +83,15 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     /// implement template method of BaseAccount
     function _validateSignature(UserOperation calldata userOp, bytes32 userOpHash)
     internal override virtual returns (uint256 validationData) {
-        // TODO: pass in zk proof in userOp (user proves that is has the secret to the hashedSecret)
-        // TODO: verify the zk proof
-        if (false)
+        // TODO: verify with userOpHash
+        // pass in zk proof in userOp signature field (user proves that it has the secret to the hashedSecret)
+        uint[2] memory pubSignals = [
+            uint(getNonce()),
+            uint(hashedSecret)
+        ];
+        bool verificationResult = _verifier.verifyGroth16Proof(userOp.signature, pubSignals);
+        // verify validity of the zk proof
+        if (!verificationResult)
             return SIG_VALIDATION_FAILED;
         return 0;
     }
@@ -111,12 +124,12 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
      * @param withdrawAddress target to send to
      * @param amount to withdraw
      */
-    function withdrawDepositTo(address payable withdrawAddress, uint256 amount) public onlyOwner {
+    function withdrawDepositTo(address payable withdrawAddress, uint256 amount, bytes memory proof) public onlyOwner(proof) {
         entryPoint().withdrawTo(withdrawAddress, amount);
     }
 
     function _authorizeUpgrade(address newImplementation) internal view override {
         (newImplementation);
-        _onlyOwner();
+        // TODO: define upgrade logic and modifier
     }
 }
