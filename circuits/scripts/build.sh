@@ -5,6 +5,7 @@ if [ -z "$SKIP_CIRCOM" ]; then
   ./scripts/g16_compile_circuit.sh transaction
   ./scripts/g16_compile_circuit.sh blocklist
   ./scripts/g16_compile_circuit.sh compliant
+  ./scripts/g16_compile_circuit.sh authentication
   node ./scripts/g16_process_output.js
   node ./scripts/generate_hasher_contract.js
 fi
