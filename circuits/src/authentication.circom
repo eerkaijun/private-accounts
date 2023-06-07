@@ -7,12 +7,16 @@ template Authentication() {
     // without revealing the secret
 
     signal input secret;
+    signal input nonce;
     signal input hashedSecret;
 
     // constraint that the user knows the correct secret
     component poseidon = Poseidon(1);
     poseidon.inputs[0] <== secret;
     poseidon.out === hashedSecret;
+
+    // safety constraint to make sure a different proof is generated each time (TODO: double check)
+    signal nonceSquare <== nonce * nonce;
 }
 
-component main { public [hashedSecret] } = Authentication();
+component main { public [nonce, hashedSecret] } = Authentication();
