@@ -32,9 +32,10 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    constructor(IEntryPoint anEntryPoint, address verifierAddress) {
+    constructor(IEntryPoint anEntryPoint, address verifierAddress, bytes32 aHashedSecret) {
         _entryPoint = anEntryPoint;
         _verifier = AuthenticationVerifier(verifierAddress);
+        _initialize(aHashedSecret);
         _disableInitializers();
     }
 
@@ -94,6 +95,11 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
         if (!verificationResult)
             return SIG_VALIDATION_FAILED;
         return 0;
+    }
+
+    /// @dev this is mainly useful for testing, but can be removed in production
+    function validateSignature(UserOperation calldata userOp) public returns (uint256 validationData) {
+        return _validateSignature(userOp, 0);
     }
 
     function _call(address target, uint256 value, bytes memory data) internal {
