@@ -32,11 +32,9 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    constructor(IEntryPoint anEntryPoint, address verifierAddress, bytes32 aHashedSecret) {
+    constructor(IEntryPoint anEntryPoint, address verifierAddress) {
         _entryPoint = anEntryPoint;
         _verifier = AuthenticationVerifier(verifierAddress);
-        _initialize(aHashedSecret);
-        _disableInitializers();
     }
 
     function _onlyOwner(bytes memory proof) internal view {
