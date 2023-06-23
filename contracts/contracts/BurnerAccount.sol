@@ -9,14 +9,14 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/utils/UUPSUpgradeable.sol";
 import "@account-abstraction/contracts/core/BaseAccount.sol";
 
-import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
+import {AccountOwnerVerifier} from "./verifiers/AccountOwnerVerifier.sol";
 
 contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     bytes32 public hashedSecret;
     uint256 private nonce;
 
     IEntryPoint public _entryPoint;
-    AuthenticationVerifier public _verifier;
+    AccountOwnerVerifier public _verifier;
 
     event BurnerAccountInitialized(IEntryPoint indexed entryPoint, bytes32 indexed hashedSecret);
 
@@ -66,7 +66,7 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
      * a new implementation of BurnerAccount must be deployed with the new EntryPoint address, then upgrading
       * the implementation by calling `upgradeTo()`
      */
-    function initialize(IEntryPoint anEntryPoint, AuthenticationVerifier aVerifier, bytes32 aHashedSecret) public virtual initializer {
+    function initialize(IEntryPoint anEntryPoint, AccountOwnerVerifier aVerifier, bytes32 aHashedSecret) public virtual initializer {
         _entryPoint = anEntryPoint;
         _verifier = aVerifier;
         hashedSecret = aHashedSecret;

@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/Create2.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import "./BurnerAccount.sol";
 
-import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
+import {AccountOwnerVerifier} from "./verifiers/AccountOwnerVerifier.sol";
 
 
 /**
@@ -16,9 +16,9 @@ import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
 contract BurnerAccountFactory {
     BurnerAccount public immutable accountImplementation;
     IEntryPoint public immutable entryPoint;
-    AuthenticationVerifier public immutable verifier;
+    AccountOwnerVerifier public immutable verifier;
 
-    constructor(IEntryPoint _entryPoint, AuthenticationVerifier _verifier) {
+    constructor(IEntryPoint _entryPoint, AccountOwnerVerifier _verifier) {
         entryPoint = _entryPoint;
         verifier = _verifier;
         accountImplementation = new BurnerAccount();

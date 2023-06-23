@@ -3,7 +3,7 @@ import {
     BurnerAccount__factory,
     BurnerAccountFactory__factory,
     MockEntryPoint__factory,
-    AuthenticationVerifier__factory,
+    AccountOwnerVerifier__factory,
 } from "../typechain-types";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { generateAuthenticationProof } from "@zrclib/sdk";
@@ -19,7 +19,7 @@ async function setup() {
     const entrypoint = await entrypointFactory.deploy();
 
     // Deploy the Verifier
-    const verifierFactory = new AuthenticationVerifier__factory(deployer);
+    const verifierFactory = new AccountOwnerVerifier__factory(deployer);
     const verifier = await verifierFactory.deploy();
 
     // Deploy burner account factory

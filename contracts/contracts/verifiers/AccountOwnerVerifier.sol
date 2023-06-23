@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import {AuthenticationVerifier as Verifier} from "@zrclib/circuits/generated/AuthenticationVerifier.sol";
 
-contract AuthenticationVerifier is Verifier {
+contract AccountOwnerVerifier is Verifier {
 
     function parseProof(bytes memory data) public pure
         returns (uint[2] memory a, uint[2][2] memory b, uint[2] memory c) {
