@@ -3,8 +3,10 @@ pragma solidity ^0.8.12;
 
 import "@openzeppelin/contracts/utils/Create2.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-
 import "./BurnerAccount.sol";
+
+import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
+
 
 /**
  * A UserOperations "initCode" holds the address of the factory, and a method call (to createAccount, in this factory).
@@ -13,9 +15,13 @@ import "./BurnerAccount.sol";
  */
 contract BurnerAccountFactory {
     BurnerAccount public immutable accountImplementation;
+    IEntryPoint public immutable entryPoint;
+    AuthenticationVerifier public immutable verifier;
 
-    constructor(IEntryPoint _entryPoint, address verifierAddress) {
-        accountImplementation = new BurnerAccount(_entryPoint, verifierAddress);
+    constructor(IEntryPoint _entryPoint, AuthenticationVerifier _verifier) {
+        entryPoint = _entryPoint;
+        verifier = _verifier;
+        accountImplementation = new BurnerAccount();
     }
 
     /**
@@ -32,7 +38,7 @@ contract BurnerAccountFactory {
         }
         ret = BurnerAccount(payable(new ERC1967Proxy{salt : bytes32(salt)}(
                 address(accountImplementation),
-                abi.encodeCall(BurnerAccount.initialize, (hashedSecret))
+                abi.encodeCall(BurnerAccount.initialize, (entryPoint, verifier, hashedSecret))
             )));
     }
 
@@ -44,7 +50,7 @@ contract BurnerAccountFactory {
                 type(ERC1967Proxy).creationCode,
                 abi.encode(
                     address(accountImplementation),
-                    abi.encodeCall(BurnerAccount.initialize, (hashedSecret))
+                    abi.encodeCall(BurnerAccount.initialize, (entryPoint, verifier, hashedSecret))
                 )
             )));
     }

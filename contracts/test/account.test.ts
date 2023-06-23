@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
 import { 
     BurnerAccount__factory,
+    BurnerAccountFactory__factory,
     MockEntryPoint__factory,
     AuthenticationVerifier__factory,
 } from "../typechain-types";
@@ -21,19 +22,22 @@ async function setup() {
     const verifierFactory = new AuthenticationVerifier__factory(deployer);
     const verifier = await verifierFactory.deploy();
 
-    // Deploy a burner account by specifying the hashed secret
-    /// @dev actual deployment should be done through the Entrypoint contract, but for testing purposes, we deploy it directly
-    const secret = BigInt(1234);
-    const hashedSecret = ethers.utils.hexlify(poseidonHash([secret]));
-    const accountFactory = new BurnerAccount__factory(deployer);
-    const contract = await accountFactory.deploy(entrypoint.address, verifier.address, hashedSecret);
-  
-    return { contract, secret };
+    // Deploy burner account factory
+    const burnerAccountFactory = new BurnerAccountFactory__factory(deployer);
+    const factory = await burnerAccountFactory.deploy(entrypoint.address, verifier.address);
+
+    return { factory };
 }
 
 it("Test burner account", async function() {
 
-    let { contract, secret } = await loadFixture(setup);
+    let { factory } = await loadFixture(setup);
+
+    // Deploy a burner account by specifying the hashed secret
+    const secret = BigInt(1234);
+    const hashedSecret = ethers.utils.hexlify(poseidonHash([secret]));
+    await factory.createAccount(hashedSecret, 0); // set salt as 0
+    const contract = BurnerAccount__factory.connect(await factory.getAddress(hashedSecret, 0), (await ethers.getSigners())[0]);
 
     // construct UserOp
     /// @dev we are only testing the signature here, so random value for other fields

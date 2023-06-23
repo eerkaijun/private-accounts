@@ -14,8 +14,8 @@ import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
 contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     bytes32 public hashedSecret;
 
-    IEntryPoint private immutable _entryPoint;
-    AuthenticationVerifier private _verifier;
+    IEntryPoint public _entryPoint;
+    AuthenticationVerifier public _verifier;
 
     event BurnerAccountInitialized(IEntryPoint indexed entryPoint, bytes32 indexed hashedSecret);
 
@@ -31,11 +31,6 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
 
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
-
-    constructor(IEntryPoint anEntryPoint, address verifierAddress) {
-        _entryPoint = anEntryPoint;
-        _verifier = AuthenticationVerifier(verifierAddress);
-    }
 
     function _onlyOwner(bytes memory proof) internal view {
         // TODO: add a zk proof that the user has the secret to the hashedSecret
@@ -70,11 +65,9 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
      * a new implementation of BurnerAccount must be deployed with the new EntryPoint address, then upgrading
       * the implementation by calling `upgradeTo()`
      */
-    function initialize(bytes32 aHashedSecret) public virtual initializer {
-        _initialize(aHashedSecret);
-    }
-
-    function _initialize(bytes32 aHashedSecret) internal virtual {
+    function initialize(IEntryPoint anEntryPoint, AuthenticationVerifier aVerifier, bytes32 aHashedSecret) public virtual initializer {
+        _entryPoint = anEntryPoint;
+        _verifier = aVerifier;
         hashedSecret = aHashedSecret;
         emit BurnerAccountInitialized(_entryPoint, hashedSecret);
     }
