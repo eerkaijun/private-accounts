@@ -13,6 +13,7 @@ import {AuthenticationVerifier} from "./verifiers/AuthenticationVerifier.sol";
 
 contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     bytes32 public hashedSecret;
+    uint256 private nonce;
 
     IEntryPoint public _entryPoint;
     AuthenticationVerifier public _verifier;
@@ -95,11 +96,19 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
 
     function _call(address target, uint256 value, bytes memory data) internal {
         (bool success, bytes memory result) = target.call{value : value}(data);
+        nonce++;
         if (!success) {
             assembly {
                 revert(add(result, 32), mload(result))
             }
         }
+    }
+
+    /**
+     * get the nonce of the current account 
+     */
+    function getNonce() public view override returns (uint256) {
+        return nonce;
     }
 
     /**
