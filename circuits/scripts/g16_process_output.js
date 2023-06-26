@@ -21,6 +21,13 @@ const FILE_TANSFORMS = [
       [`contract Verifier`, `contract CompliantVerifier`],
       [`pragma solidity ^0.6.11;`, `pragma solidity ^0.8.0;`],
     ]
+  },
+  {
+    filename: "./generated/AuthenticationVerifier.sol",
+    edits:[
+      [`contract Verifier`, `contract AuthenticationVerifier`],
+      [`pragma solidity ^0.6.11;`, `pragma solidity ^0.8.0;`],
+    ]
   }
 ];
 

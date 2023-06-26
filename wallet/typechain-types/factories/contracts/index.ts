@@ -6,6 +6,7 @@ export * as mocks from "./mocks";
 export * as verifiers from "./verifiers";
 export { AbstractShieldedPool__factory } from "./AbstractShieldedPool__factory";
 export { Blocklist__factory } from "./Blocklist__factory";
+export { BurnerAccount__factory } from "./BurnerAccount__factory";
 export { CompliantShieldedPool__factory } from "./CompliantShieldedPool__factory";
 export { MultiAssetShieldedPool__factory } from "./MultiAssetShieldedPool__factory";
 export { ShieldedPool__factory } from "./ShieldedPool__factory";

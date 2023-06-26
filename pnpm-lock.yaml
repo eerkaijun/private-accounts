@@ -30,6 +30,9 @@ importers:
 
   contracts:
     dependencies:
+      '@account-abstraction/contracts':
+        specifier: ^0.6.0
+        version: 0.6.0
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
@@ -305,6 +308,10 @@ importers:
         version: link:../contracts
 
 packages:
+
+  /@account-abstraction/contracts@0.6.0:
+    resolution: {integrity: sha512-8ooRJuR7XzohMDM4MV34I12Ci2bmxfE9+cixakRL7lA4BAwJKQ3ahvd8FbJa9kiwkUPCUNtj+/zxDQWYYalLMQ==}
+    dev: false
 
   /@ampproject/remapping@2.2.1:
     resolution: {integrity: sha512-lFMjJTrFL3j7L9yBxwYfCq2k6qqwHyzuUl/XBnif78PWTJYyL/dfowQHWE3sp6U6ZzqWiiIZnpTMO96zhkjwtg==}
