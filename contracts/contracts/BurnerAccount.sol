@@ -90,8 +90,9 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     }
 
     /// @dev this is mainly useful for testing, but can be removed in production
-    function validateSignature(UserOperation calldata userOp) public returns (uint256 validationData) {
-        return _validateSignature(userOp, 0);
+    function validateSignature(UserOperation calldata userOp) public {
+        uint256 validationData = _validateSignature(userOp, 0);
+        require(validationData == 0, "signature validation failed");
     }
 
     function _call(address target, uint256 value, bytes memory data) internal {

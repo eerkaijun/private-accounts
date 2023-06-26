@@ -7,7 +7,7 @@ import {
 } from "../typechain-types";
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { generateAuthenticationProof } from "@zrclib/sdk";
-import { poseidonHash, fieldToString } from "@zrclib/sdk/src/poseidon";
+import { poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
 import { expect } from "chai";
 
 async function setup() {
@@ -35,7 +35,7 @@ it("Test burner account", async function() {
 
     // Deploy a burner account by specifying the hashed secret
     const secret = BigInt(1234);
-    const hashedSecret = ethers.utils.hexlify(poseidonHash([secret]));
+    const hashedSecret = ethers.utils.hexlify(fieldToObject(poseidonHash([secret])));
     await factory.createAccount(hashedSecret, 0); // set salt as 0
     const contract = BurnerAccount__factory.connect(await factory.getAddress(hashedSecret, 0), (await ethers.getSigners())[0]);
 
@@ -56,7 +56,5 @@ it("Test burner account", async function() {
         paymasterAndData: "0x",
         signature: proof
     }
-    const result = await contract.validateSignature(userOp);
-    console.log("Result: ", result);
-
+    expect(await contract.validateSignature(userOp)).to.not.be.reverted;
 })
