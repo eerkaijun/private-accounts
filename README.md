@@ -1,8 +1,8 @@
-<p align="center"><h1 align="center">Private Wallet 🔒</h1></p>
+<p align="center"><h1 align="center">Private Accounts 🔒</h1></p>
 
 ## Mission
 
-To bring privacy to EVM chains.
+Private accounts for EVM chains.
 
 ## Disclaimer
 
