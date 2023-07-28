@@ -47,6 +47,6 @@ pnpm wallet
 
 ## Architectural Overview
 
-![architecture overview](overview.png)
+![architecture overview](private-accounts.png)
 
 The above diagram shows the current high level overview of the user flow, which will be constantly updated as new modules are being built out.
