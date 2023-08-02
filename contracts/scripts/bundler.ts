@@ -8,12 +8,12 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { generateAuthenticationProof } from "@zrclib/sdk";
 import { poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
 
+// Entrypoint contract
+const entrypointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+
 async function setup() {
     // Prepare signers
     const [deployer] = await ethers.getSigners();
-
-    // Entrypoint contract
-    const entrypointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 
     // Deploy the Verifier
     const verifierFactory = new AccountOwnerVerifier__factory(deployer);
@@ -41,7 +41,7 @@ async function main() {
         burnerAccountFactoryAddress,
         factory.interface.encodeFunctionData("createAccount", [hashedSecret, 0]) // set salt as 0
     ]);
-    console.log("Initcoe: ", initCode);
+    console.log("Initcode: ", initCode);
     const accountAddress = await factory.getAddress(hashedSecret, 0);
     console.log("Generated account address: ", accountAddress);
 
@@ -73,7 +73,43 @@ async function main() {
         paymasterAndData: "0x",
         signature: proof
     }
-    console.log("Generated UserOp:", userOp)
+    
+    // Request Pimlico verifying paymaster to sponsor the user operation
+    const chain = "linea-testnet";
+    const apiKey = "846c3030-af99-45e8-9089-915c369d4012";
+    const pimlicoEndpoint = `https://api.pimlico.io/v1/${chain}/rpc?apikey=${apiKey}`;
+    const pimlicoProvider = new ethers.providers.StaticJsonRpcProvider(pimlicoEndpoint);
+ 
+    const sponsorUserOperationResult = await pimlicoProvider.send("pm_sponsorUserOperation", [
+	    userOp,
+	    {
+		    entryPoint: entrypointAddress,
+	    },
+    ]);
+    const paymasterAndData = sponsorUserOperationResult.paymasterAndData;
+    userOp.paymasterAndData = paymasterAndData;
+    console.log("Pimlico paymasterAndData:", paymasterAndData);
+
+    // Submit the userOp to be bundled
+    const userOperationHash = await pimlicoProvider.send("eth_sendUserOperation", [
+        userOp,
+        entrypointAddress
+    ]);
+    console.log("UserOperation hash:", userOperationHash);
+ 
+    // Wait for the userOperation to be included, by continually querying for the receipts
+    console.log("Querying for receipts...");
+    let receipt = null;
+    while (receipt === null) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        receipt = await pimlicoProvider.send("eth_getUserOperationReceipt", [
+		    userOperationHash,
+	    ]);
+        console.log(receipt === null ? "Still waiting..." : receipt);
+    }
+ 
+    const txHash = receipt.receipt.transactionHash;
+    console.log(`UserOperation included: https://goerli.lineascan.build/tx/${txHash}`);
 }
 
 main().catch((error) => {
