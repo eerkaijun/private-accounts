@@ -1,13 +1,5 @@
-# Sample Hardhat Project
+# Private Accounts Smart Contracts Suite
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This directory contains the core smart contracts for private accounts.
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+To run the tests, run `npx hardhat test`.
