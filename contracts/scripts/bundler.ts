@@ -4,9 +4,11 @@ import {
     BurnerAccountFactory__factory,
     AccountOwnerVerifier__factory,
 } from "../typechain-types";
-import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
+import { EntryPoint__factory } from "@account-abstraction/contracts";
 import { generateAuthenticationProof } from "@zrclib/sdk";
 import { poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 // Entrypoint contract
 const entrypointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
@@ -22,13 +24,14 @@ async function setup() {
     // Deploy burner account factory
     const burnerAccountFactory = new BurnerAccountFactory__factory(deployer);
     const factory = await burnerAccountFactory.deploy(entrypointAddress, verifier.address);
+    console.log("BurnerAccountFactory deployed at: ", factory.address);
 
     return { factory };
 }
 
 async function main() {
 
-    let { factory } = await loadFixture(setup);
+    let { factory } = await setup();
 
     // Generate the initcode to deploy new burner account
     const burnerAccountFactoryAddress = factory.address;
@@ -44,6 +47,25 @@ async function main() {
     console.log("Initcode: ", initCode);
     const accountAddress = await factory.getAddress(hashedSecret, 0);
     console.log("Generated account address: ", accountAddress);
+
+    // Calculate sender address
+    const entryPoint = EntryPoint__factory.connect(
+        entrypointAddress,
+        lineaProvider,
+    );
+    const senderAddress = await entryPoint.callStatic.getSenderAddress(initCode)
+        .then(() => {
+            throw new Error("Expected getSenderAddress() to revert");
+        })
+        .catch((e) => {
+            const data = e.message.match(/0x6ca7b806([a-fA-F\d]*)/)?.[1];
+            if (!data) {
+                return Promise.reject(new Error("Failed to parse revert data"));
+            }
+            const addr = ethers.utils.getAddress(`0x${data.slice(24, 64)}`);
+            return Promise.resolve(addr);
+       });
+    console.log("Calculated sender address:", senderAddress);
 
     // Now, generate the calldata to execute a transaction
     const to = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik
@@ -76,7 +98,7 @@ async function main() {
     
     // Request Pimlico verifying paymaster to sponsor the user operation
     const chain = "linea-testnet";
-    const apiKey = "846c3030-af99-45e8-9089-915c369d4012";
+    const apiKey = process.env.PIMLICO_API_KEY;
     const pimlicoEndpoint = `https://api.pimlico.io/v1/${chain}/rpc?apikey=${apiKey}`;
     const pimlicoProvider = new ethers.providers.StaticJsonRpcProvider(pimlicoEndpoint);
  
