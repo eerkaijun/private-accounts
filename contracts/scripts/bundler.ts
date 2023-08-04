@@ -6,25 +6,36 @@ import {
 } from "../typechain-types";
 import { EntryPoint__factory } from "@account-abstraction/contracts";
 import { generateAuthenticationProof } from "@zrclib/sdk";
-import { poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
+import { ensurePoseidon, poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
 import * as dotenv from "dotenv";
 dotenv.config();
 
 // Entrypoint contract
 const entrypointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
+// Let's run it on Linea Goerli
+const lineaProvider = new ethers.providers.StaticJsonRpcProvider("https://rpc.goerli.linea.build/");
 
 async function setup() {
     // Prepare signers
     const [deployer] = await ethers.getSigners();
 
-    // Deploy the Verifier
-    const verifierFactory = new AccountOwnerVerifier__factory(deployer);
-    const verifier = await verifierFactory.deploy();
+    let factory;
+    if (process.env.BURNER_ACCOUNT_FACTORY_ADDRESS == undefined) {
+        // Deploy the Verifier
+        const verifierFactory = new AccountOwnerVerifier__factory(deployer);
+        const verifier = await verifierFactory.deploy();
 
-    // Deploy burner account factory
-    const burnerAccountFactory = new BurnerAccountFactory__factory(deployer);
-    const factory = await burnerAccountFactory.deploy(entrypointAddress, verifier.address);
-    console.log("BurnerAccountFactory deployed at: ", factory.address);
+        // Deploy burner account factory
+        const burnerAccountFactory = new BurnerAccountFactory__factory(deployer);
+        factory = await burnerAccountFactory.deploy(entrypointAddress, verifier.address);
+        console.log("BurnerAccountFactory deployed at: ", factory.address);
+    } else {
+        // Use existing factory
+        factory = new BurnerAccountFactory__factory(deployer).attach(process.env.BURNER_ACCOUNT_FACTORY_ADDRESS);
+        console.log("Using existing BurnerAccountFactory at: ", factory.address);
+    }
+
+    await ensurePoseidon();
 
     return { factory };
 }
@@ -35,8 +46,7 @@ async function main() {
 
     // Generate the initcode to deploy new burner account
     const burnerAccountFactoryAddress = factory.address;
-    // Let's run it on Linea Goerli
-    const lineaProvider = new ethers.providers.StaticJsonRpcProvider("https://rpc.goerli.linea.build/");
+    
     // Deploy a burner account by specifying the hashed secret
     const secret = BigInt(1234);
     const hashedSecret = ethers.utils.hexlify(fieldToObject(poseidonHash([secret])));
