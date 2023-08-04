@@ -22,6 +22,10 @@ const config: HardhatUserConfig = {
     "polygon-zkevm-testnet": {
       url: "https://rpc.public.zkevm-test.net",
       accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
+    },
+    "linea-goerli-testnet": {
+      url: "https://rpc.goerli.linea.build/",
+      accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
     }
   },
   mocha: {

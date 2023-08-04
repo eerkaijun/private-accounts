@@ -21,7 +21,7 @@ contract BurnerAccountFactory {
     constructor(IEntryPoint _entryPoint, AccountOwnerVerifier _verifier) {
         entryPoint = _entryPoint;
         verifier = _verifier;
-        accountImplementation = new BurnerAccount();
+        accountImplementation = new BurnerAccount(_entryPoint, _verifier);
     }
 
     /**
@@ -38,7 +38,7 @@ contract BurnerAccountFactory {
         }
         ret = BurnerAccount(payable(new ERC1967Proxy{salt : bytes32(salt)}(
                 address(accountImplementation),
-                abi.encodeCall(BurnerAccount.initialize, (entryPoint, verifier, hashedSecret))
+                abi.encodeCall(BurnerAccount.initialize, (hashedSecret))
             )));
     }
 
@@ -50,7 +50,7 @@ contract BurnerAccountFactory {
                 type(ERC1967Proxy).creationCode,
                 abi.encode(
                     address(accountImplementation),
-                    abi.encodeCall(BurnerAccount.initialize, (entryPoint, verifier, hashedSecret))
+                    abi.encodeCall(BurnerAccount.initialize, (hashedSecret))
                 )
             )));
     }

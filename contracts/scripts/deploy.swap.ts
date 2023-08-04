@@ -4,7 +4,7 @@ import {
   MockSwapRouter__factory,
   MultiAssetShieldedPool__factory,
   SwapExecutor__factory,
-  Verifier__factory,
+  TransactionVerifier__factory,
 } from "../typechain-types";
 import artifact from "@zrclib/circuits/generated/Hasher.json";
 import { BigNumber } from "ethers";
@@ -39,7 +39,7 @@ async function deployMultiAssetShieldedPool() {
   const hasher = await Hasher.deploy();
 
   // Deploy the Verifier
-  const verifierFactory = new Verifier__factory(deployer);
+  const verifierFactory = new TransactionVerifier__factory(deployer);
   const verifier = await verifierFactory.deploy();
 
   // Deploy the Swap Executor

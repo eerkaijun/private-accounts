@@ -1,13 +1,7 @@
-# Sample Hardhat Project
+# Private Accounts Smart Contracts Suite
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This directory contains the core smart contracts for private accounts.
 
-Try running some of the following tasks:
+To run the tests, run `npx hardhat test`.
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+To try using an ERC4337 bundler to submit transactions on behalf of the burner accounts, run `npx hardhat run scripts/bundler.ts --network linea-goerli-testnet`. This uses a paymaster to sponsor the transaction of the burner account. (Prerequisite: need to set an existing address of the burner account factory on Linea testnet and also obtain a free Pimlico API key for the bundler)

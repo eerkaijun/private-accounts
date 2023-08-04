@@ -15,8 +15,8 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
     bytes32 public hashedSecret;
     uint256 private nonce;
 
-    IEntryPoint public _entryPoint;
-    AccountOwnerVerifier public _verifier;
+    IEntryPoint public immutable _entryPoint;
+    AccountOwnerVerifier public immutable _verifier;
 
     event BurnerAccountInitialized(IEntryPoint indexed entryPoint, bytes32 indexed hashedSecret);
 
@@ -32,6 +32,11 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
 
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
+
+    constructor(IEntryPoint anEntryPoint, AccountOwnerVerifier aVerifier) {
+        _entryPoint = anEntryPoint;
+        _verifier = aVerifier;
+    }
 
     function _onlyOwner(bytes memory proof) internal view {
         // TODO: add a zk proof that the user has the secret to the hashedSecret
@@ -66,9 +71,7 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
      * a new implementation of BurnerAccount must be deployed with the new EntryPoint address, then upgrading
       * the implementation by calling `upgradeTo()`
      */
-    function initialize(IEntryPoint anEntryPoint, AccountOwnerVerifier aVerifier, bytes32 aHashedSecret) public virtual initializer {
-        _entryPoint = anEntryPoint;
-        _verifier = aVerifier;
+    function initialize(bytes32 aHashedSecret) public virtual initializer {
         hashedSecret = aHashedSecret;
         emit BurnerAccountInitialized(_entryPoint, hashedSecret);
     }
@@ -82,6 +85,8 @@ contract BurnerAccount is BaseAccount, UUPSUpgradeable, Initializable {
             uint(getNonce()),
             uint(hashedSecret)
         ];
+        // TODO: there's some issue with calling this function (it's not initialized)
+        // TODO: try to find eth infinitism deploy script to see what needs to be initialized
         bool verificationResult = _verifier.verifyGroth16Proof(userOp.signature, pubSignals);
         // verify validity of the zk proof
         if (!verificationResult)

@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import {
   MockErc20__factory,
   MultiAssetShieldedPool__factory,
-  Verifier__factory,
+  TransactionVerifier__factory,
   SwapExecutor__factory,
   MockSwapRouter__factory,
 } from "../typechain-types";
@@ -38,7 +38,7 @@ async function deployMultiAssetShieldedPool() {
     const hasher = await Hasher.deploy();
   
     // Deploy the Verifier
-    const verifierFactory = new Verifier__factory(deployer);
+    const verifierFactory = new TransactionVerifier__factory(deployer);
     const verifier = await verifierFactory.deploy();
   
     // Deploy the Swap Executor
