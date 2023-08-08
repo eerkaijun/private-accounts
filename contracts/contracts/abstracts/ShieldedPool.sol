@@ -2,36 +2,30 @@
 
 pragma solidity ^0.8.0;
 
-import {CompliantVerifier} from "@zrclib/circuits/generated/CompliantVerifier.sol";
+import {TransactionVerifier} from "@zrclib/circuits/generated/TransactionVerifier.sol";
 import {AbstractShieldedPool} from "./AbstractShieldedPool.sol";
-import {MerkleTreeWithHistory} from "./merkle/MerkleTreeWithHistory.sol";
-import {MerkleTreeForBlocklist} from "./merkle/MerkleTreeForBlocklist.sol";
+import {MerkleTreeWithHistory} from "../merkle/MerkleTreeWithHistory.sol";
 import {SwapExecutor} from "./SwapExecutor.sol";
 
-contract ShieldedPoolWithBlocklist is AbstractShieldedPool {
-
-    MerkleTreeForBlocklist public blocklistTree;
-    CompliantVerifier public verifier;
+contract ShieldedPool is AbstractShieldedPool {
+    TransactionVerifier public verifier;
 
     constructor(
         uint32 _levels,
         address _hasher,
-        address _transactionVerifier,
-        address _blocklistVerifier,
+        address _verifier,
         address _swapExecutor
     ) MerkleTreeWithHistory(_levels, _hasher) {
-        verifier = CompliantVerifier(_transactionVerifier);
+        verifier = TransactionVerifier(_verifier);
         swapExecutor = SwapExecutor(_swapExecutor);
-        blocklistTree = new MerkleTreeForBlocklist(_levels, _blocklistVerifier);
         _initialize(); // initialize the merkle tree
     }
 
     function verifyGroth16Proof(
         Proof memory _proof
     ) internal override view returns (bool) {
-        uint[9] memory pubSignals = [
+        uint[8] memory pubSignals = [
             uint(_proof.proofArguments.root),
-            uint(blocklistTree.root()), // blocklist root always come from the blocklist merkle tree
             _proof.proofArguments.publicAmount,
             uint160(_proof.proofArguments.publicAsset),
             uint(_proof.proofArguments.extDataHash),
