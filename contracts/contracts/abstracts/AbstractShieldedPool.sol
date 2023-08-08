@@ -3,7 +3,7 @@
 pragma solidity ^0.8.0;
 
 import {SwapExecutor} from "./SwapExecutor.sol";
-import {MerkleTreeWithHistory} from "./merkle/MerkleTreeWithHistory.sol";
+import {MerkleTreeWithHistory} from "../merkle/MerkleTreeWithHistory.sol";
 
 abstract contract AbstractShieldedPool is MerkleTreeWithHistory {
     int256 public MAX_EXT_AMOUNT = 2 ** 248;
