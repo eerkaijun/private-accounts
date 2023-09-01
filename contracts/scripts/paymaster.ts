@@ -9,7 +9,6 @@ import {
     TransactionVerifier__factory,
     SwapExecutor__factory
 } from "../typechain-types";
-import { EntryPoint__factory } from "@account-abstraction/contracts";
 import { generateAuthenticationProof, Account } from "@zrclib/sdk";
 import { ensurePoseidon, poseidonHash, fieldToObject } from "@zrclib/sdk/src/poseidon";
 import { sleep, tend, time } from "../utils";
@@ -81,8 +80,8 @@ async function setup() {
     // Deploy private paymaster
     const paymasterFactory = new PrivatePaymaster__factory(deployer);
     const paymaster = await paymasterFactory.deploy(mixer.address, entrypointAddress);
-    // await paymaster.addStake(3000, { value: ethers.utils.parseEther("0.1")});
-    // await paymaster.deposit({ value: ethers.utils.parseEther("0.1")});
+    await paymaster.connect(deployer).addStake(3000, { value: ethers.utils.parseEther("0.1")});
+    await paymaster.connect(deployer).deposit({ value: ethers.utils.parseEther("0.1")});
 
     await ensurePoseidon();
 
@@ -131,12 +130,6 @@ async function main() {
     const accountAddress = await factory.getAddress(hashedSecret, 0);
     console.log("Generated account address: ", accountAddress);
 
-    // Calculate sender address
-    const entryPoint = EntryPoint__factory.connect(
-        entrypointAddress,
-        lineaProvider,
-    );
-
     // Now, generate the calldata to execute a transaction
     const to = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" // vitalik
     const value = 0
@@ -150,7 +143,8 @@ async function main() {
 
     // Withdraw from mixer (proof is included in paymaster data)
     t = time("Creates unshield proof for 10 coins");
-    proof = await alice.proveUnshield(TEN, deployer.address, token.address);
+    // Withdraw to burner account
+    proof = await alice.proveUnshield(TEN, burnerAccount.address, token.address);
     tend(t);
     const proofData = ethers.utils.defaultAbiCoder.encode(
         [

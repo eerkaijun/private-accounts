@@ -9,7 +9,7 @@ import { AbstractShieldedPool } from "./abstracts/AbstractShieldedPool.sol";
 contract PrivatePaymaster is BasePaymaster {
 
     // TODO: this should not be a hardcoded value
-    uint256 public constant PAYMASTER_FEE = 0.01 ether;
+    uint256 public constant PAYMASTER_FEE = 0;
 
     // TODO: calculate cost of the postOp
     uint256 constant public COST_OF_POST = 15000;
@@ -30,7 +30,10 @@ contract PrivatePaymaster is BasePaymaster {
     internal override returns (bytes memory context, uint256 validationData) {
         // decode proof sent to the mixer for withdrawal
         AbstractShieldedPool.Proof memory proofData;
-        proofData = abi.decode(userOp.paymasterAndData[20:], (AbstractShieldedPool.Proof));
+        (proofData.proofArguments, proofData.extData) = abi.decode(
+            userOp.paymasterAndData[20:], 
+            (AbstractShieldedPool.ProofArguments, AbstractShieldedPool.ExtData)
+        );
         
         // set context for postOp
         address account = userOp.sender;
