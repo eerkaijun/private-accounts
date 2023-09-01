@@ -30,7 +30,7 @@ contract PrivatePaymaster is BasePaymaster {
     internal override returns (bytes memory context, uint256 validationData) {
         // decode proof sent to the mixer for withdrawal
         AbstractShieldedPool.Proof memory proofData;
-        proofData = abi.decode(userOp.paymasterAndData, (AbstractShieldedPool.Proof));
+        proofData = abi.decode(userOp.paymasterAndData[20:], (AbstractShieldedPool.Proof));
         
         // set context for postOp
         address account = userOp.sender;
