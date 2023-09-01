@@ -26,6 +26,7 @@ const config: HardhatUserConfig = {
     "linea-goerli-testnet": {
       url: "https://rpc.goerli.linea.build/",
       accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
+      gasPrice: 1000000000,
     }
   },
   mocha: {

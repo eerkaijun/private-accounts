@@ -41,16 +41,19 @@ async function setup() {
 
     // Deploy the poseidon hasher
     const { abi, bytecode } = artifact;
-    const Hasher = await ethers.getContractFactory(abi, bytecode);
+    const Hasher = await ethers.getContractFactory(abi, bytecode, deployer);
     const hasher = await Hasher.deploy();
+    console.log("Hasher deployed at: ", hasher.address);
 
     // Deploy the TransactionVerifier
     const verifierFactory = new TransactionVerifier__factory(deployer);
     const verifier = await verifierFactory.deploy();
+    console.log("TransactionVerifier deployed at: ", verifier.address);
 
     // Deploy the Swap Executor
     const swapExecutorFactory = new SwapExecutor__factory(deployer);
     const swapExecutor = await swapExecutorFactory.deploy();
+    console.log("SwapExecutor deployed at: ", swapExecutor.address);
 
     // Deploy the multi asset shielded pool
     const maspFactory = new MultiAssetShieldedPool__factory(deployer);
@@ -59,6 +62,7 @@ async function setup() {
         verifier.address,
         swapExecutor.address
     );
+    console.log("MultiAssetShieldedPool deployed at: ", mixer.address);
 
     let factory;
     if (process.env.BURNER_ACCOUNT_FACTORY_ADDRESS == undefined) {
@@ -80,6 +84,7 @@ async function setup() {
     // Deploy private paymaster
     const paymasterFactory = new PrivatePaymaster__factory(deployer);
     const paymaster = await paymasterFactory.deploy(mixer.address, entrypointAddress);
+    console.log("PrivatePaymaster deployed at: ", paymaster.address);
     await paymaster.connect(deployer).addStake(3000, { value: ethers.utils.parseEther("0.1")});
     await paymaster.connect(deployer).deposit({ value: ethers.utils.parseEther("0.1")});
 
