@@ -15,6 +15,10 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
+    "goerli": {
+      url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
+    },
     "mantle-testnet": {
       url: "https://rpc.testnet.mantle.xyz/",
       accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
@@ -26,7 +30,6 @@ const config: HardhatUserConfig = {
     "linea-goerli-testnet": {
       url: "https://rpc.goerli.linea.build/",
       accounts: process.env.PRIV_KEY ? [process.env.PRIV_KEY] : [], // Uses the private key from the .env file if it exists
-      gasPrice: 1000000000,
     }
   },
   mocha: {

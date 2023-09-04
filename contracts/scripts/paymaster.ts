@@ -18,9 +18,9 @@ dotenv.config();
 
 // Entrypoint contract
 const entrypointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
-// Let's run it on Linea Goerli
-const lineaProvider = new ethers.providers.StaticJsonRpcProvider("https://rpc.goerli.linea.build/");
-const chain = "linea-testnet";
+// Let's run it on Goerli
+const goerliProvider = new ethers.providers.StaticJsonRpcProvider(`https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
+const chain = "goerli";
 const apiKey = process.env.PIMLICO_API_KEY;
 const pimlicoEndpoint = `https://api.pimlico.io/v1/${chain}/rpc?apikey=${apiKey}`;
 const pimlicoProvider = new ethers.providers.StaticJsonRpcProvider(pimlicoEndpoint);
@@ -100,7 +100,7 @@ async function main() {
     const TEN = 10_000_000;
 
     let { mixer, factory, paymaster } = await setup();
-    let token = await deployERC20Token("LUSD", "LUSD");
+    let token = await deployERC20Token("TEST", "TEST");
 
     // CREATE ACCOUNTS
     const alice = await Account.create(mixer, deployer, "password123");
@@ -114,15 +114,17 @@ async function main() {
     tend(t);
 
     t = time("Approves ERC20 payment");
-    await token.approve(mixer.address, TEN);
+    await (await token.approve(mixer.address, TEN)).wait();
     tend(t);
 
     t = time("Submits transaction");
-    await mixer.transact(proof);
+    await (await mixer.transact(proof)).wait();
     tend(t);
 
     // Allow DBStore to sync
-    await sleep(10_000);
+    console.log("Waiting DB Store to sync...");
+    await sleep(300_000);
+    console.log("DB Store synced");
 
     // Deploy a burner account by specifying the hashed secret
     const secret = BigInt(5678);
@@ -141,7 +143,7 @@ async function main() {
     const data = "0x68656c6c6f" // "hello" encoded to utf-8 bytes
     const burnerAccount = BurnerAccount__factory.connect(
 	    accountAddress,
-	    lineaProvider,
+	    goerliProvider,
     );
     const callData = burnerAccount.interface.encodeFunctionData("execute", [to, value, data]);
     console.log("Generated callData:", callData)
@@ -163,7 +165,7 @@ async function main() {
     // Construct UserOp
     let nonce = 0;
     const authenticationProof = await generateAuthenticationProof(secret, nonce);
-    const gasPrice = await lineaProvider.getGasPrice()
+    const gasPrice = await goerliProvider.getGasPrice()
     const userOp = {
         sender: accountAddress,
         nonce: nonce,
@@ -197,7 +199,7 @@ async function main() {
     }
  
     const txHash = receipt.receipt.transactionHash;
-    console.log(`UserOperation included: https://goerli.lineascan.build/tx/${txHash}`);
+    console.log(`UserOperation included: https://goerli.etherscan.io/tx/${txHash}`);
 }
 
 main().catch((error) => {
