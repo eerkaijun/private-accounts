@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "hardhat test",
-    "build": "hardhat compile",
+    "build": "hardhat compile && ./scripts/build.sh",
     "clean": "./scripts/clean.sh",
     "dev": "concurrently -r \"hardhat node\" \"sleep 5 && hardhat run --network localhost scripts/deploy.swap.ts\""
   },

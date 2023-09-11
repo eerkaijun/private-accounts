@@ -10,15 +10,34 @@ contract MultiAssetShieldedPoolTest is Test {
 
     MultiAssetShieldedPool public shieldedPool;
 
+    function deployFromBytecode(bytes memory bytecode) public returns (address) {
+        address child;
+        assembly{
+            mstore(0x0, bytecode)
+            child := create(0,0xa0, calldatasize())
+        }
+        return child;
+    }
+
     function setUp() public {
-        // TODO: deploy hasher contract using cheatcode
+        // deploy hasher contract using cheatcode
+        string memory root = vm.projectRoot();
+        string memory path = string.concat(root, "/test/utils/Hasher.json");
+        assertTrue(vm.exists(path));
+        string memory data = vm.readFile(path);
+        bytes memory bytecode = vm.parseJsonBytes(data, ".bytecode");
+        address hasher = deployFromBytecode(bytecode);
+        
+        // deploy other contracts
         TransactionVerifier verifier = new TransactionVerifier();
         SwapExecutor swapExecutor = new SwapExecutor();
-        shieldedPool = new MultiAssetShieldedPool(address(0), address(verifier), address(swapExecutor));
+
+        // initialize shielded pool
+        shieldedPool = new MultiAssetShieldedPool(hasher, address(verifier), address(swapExecutor));
     }
 
     function invariant_testDeposit() public {
-        
+        assertEq(shieldedPool.MAX_EXT_AMOUNT(), 2 ** 248);
     }
     
 }
