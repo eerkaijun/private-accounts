@@ -1,0 +1,4 @@
+forge-std/=lib/forge-std/src/
+@zrclib/=node_modules/@zrclib
+@openzeppelin=node_modules/@openzeppelin
+@account-abstraction/=node_modules/@account-abstraction
