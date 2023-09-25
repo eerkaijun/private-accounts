@@ -2,4 +2,4 @@ packages:
   - "circuits"
   - "sdk"
   - "contracts"
-  # - "wallet"
+  - "wallet"
