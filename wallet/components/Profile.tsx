@@ -241,6 +241,18 @@ export function Profile({
           title={"Private Account"}
         />
       }
+      virtual={
+        <ProfileLayout
+          address={address}
+          asset={asset}
+          balances={balances.publicBalances}
+          chainId={chainId}
+          isPrivate={false}
+          pubkey={pubkey}
+          setAsset={setAsset}
+          title={"Virtual Accounts"}
+        />
+      }
     ></ShieldedTabs>
   );
 }
