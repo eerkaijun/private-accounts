@@ -9,7 +9,7 @@ import { WalletActionButton } from "@/ui/WalletActionButton";
 import { Spacer } from "@/ui/Spacer";
 import { IconBaseProps } from "react-icons";
 import { BsFillEmojiSunglassesFill } from "react-icons/bs";
-import { ShieldedTabs } from "./ShieldedMode";
+import { ProfileTabs } from "./ShieldedMode";
 import { ReactNode, useCallback } from "react";
 import { Vertical } from "@/ui/Vertical";
 import { getTokenFromAddress } from "@/contracts/get_contract";
@@ -216,7 +216,7 @@ export function Profile({
 }) {
   console.log("Profile:", { pubkey });
   return (
-    <ShieldedTabs
+    <ProfileTabs
       public={
         <ProfileLayout
           address={address}
@@ -253,6 +253,6 @@ export function Profile({
           title={"Virtual Accounts"}
         />
       }
-    ></ShieldedTabs>
+    ></ProfileTabs>
   );
 }

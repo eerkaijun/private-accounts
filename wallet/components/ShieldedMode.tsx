@@ -13,16 +13,19 @@ import React, {
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 
+
+enum ProfileTab {
+  PUBLIC,
+  PRIVATE,
+  VIRTUAL,
+}
+
 export const ProfileTabContext = createContext<{
-  isShielded: boolean;
-  setShielded: Dispatch<SetStateAction<boolean>>;
-  isVirtual: boolean;
-  setVirtual: Dispatch<SetStateAction<boolean>>;
+  currentProfileTab: ProfileTab;
+  setCurrentProfileTab: Dispatch<SetStateAction<ProfileTab>>;
 }>({
-  isShielded: false,
-  setShielded() {},
-  isVirtual: false,
-  setVirtual() {}
+  currentProfileTab: ProfileTab.PUBLIC,
+  setCurrentProfileTab() {}
 });
 
 export function useProfileTabApi() {
@@ -30,16 +33,15 @@ export function useProfileTabApi() {
 }
 
 export function ProfileTabProvider(p: { children: ReactNode }) {
-  const [isShielded, setShielded] = useState(false);
-  const [isVirtual, setVirtual] = useState(false);
-  const value = useMemo(() => ({ isShielded, setShielded, isVirtual, setVirtual }), [isShielded, isVirtual]);
+  const [currentProfileTab, setCurrentProfileTab] = useState<ProfileTab>(ProfileTab.PUBLIC);
+  const value = useMemo(() => ({ currentProfileTab, setCurrentProfileTab }), [currentProfileTab]);
   return (
     <div
       className={classNames("min-h-screen", {
-        "bg-black": isShielded,
-        "text-white": isShielded,
-        "bg-orange-300": isVirtual,
-        "text-blue-800": isVirtual
+        "bg-black": currentProfileTab === ProfileTab.PRIVATE,
+        "text-white": currentProfileTab === ProfileTab.PRIVATE,
+        "bg-orange-300": currentProfileTab === ProfileTab.VIRTUAL,
+        "text-blue-800": currentProfileTab === ProfileTab.VIRTUAL
       })}
     >
       <ProfileTabContext.Provider value={value}>
@@ -56,13 +58,16 @@ type TabProps = {
   children: ReactNode;
   onClick: () => void;
 };
+
 function Tab(p: TabProps) {
   if (!p.active) return null;
   return null;
 }
 
+
+
 function TabGroup(p: { children: ReactNode }) {
-  const { isShielded, isVirtual } = useProfileTabApi();
+  const { currentProfileTab } = useProfileTabApi();
 
   const tabs =
     React.Children.map(p.children, (child) => {
@@ -83,9 +88,9 @@ function TabGroup(p: { children: ReactNode }) {
               className={classNames("w-full p-6 cursor-pointer", {
                 "border-b": !active,
                 "border-b-10": !active,
-                "border-white": isShielded && !isVirtual,
-                "border-black": !isShielded && !isVirtual,
-                "border-blue-800": !isShielded && isVirtual,
+                "border-white": currentProfileTab === ProfileTab.PRIVATE,
+                "border-black": currentProfileTab === ProfileTab.PUBLIC,
+                "border-blue-800": currentProfileTab === ProfileTab.VIRTUAL,
                 "border-t": active,
                 "border-t-10": active,
                 "border-x": active,
@@ -100,35 +105,33 @@ function TabGroup(p: { children: ReactNode }) {
         </Horizontal>
       </div>
       <div>{content}</div>
-      <div>Shielded: {isShielded.toString()}</div>
-      <div>Virtual: {isVirtual.toString()}</div>
     </div>
   );
 }
 
-export function ShieldedTabs(p: { public: ReactNode; private: ReactNode; virtual: ReactNode }) {
-  const { isShielded, setShielded, isVirtual, setVirtual } = useProfileTabApi();
+export function ProfileTabs(p: { public: ReactNode; private: ReactNode; virtual: ReactNode }) {
+  const { currentProfileTab, setCurrentProfileTab } = useProfileTabApi();
 
   return (
     <TabGroup>
       <Tab
-        active={!isShielded && !isVirtual}
+        active={currentProfileTab === ProfileTab.PUBLIC}
         title="Public"
-        onClick={() => {setShielded(false); setVirtual(false)}}
+        onClick={() => {setCurrentProfileTab(ProfileTab.PUBLIC)}}
       >
         {p.public}
       </Tab>
       <Tab
-        active={isShielded && !isVirtual}
+        active={currentProfileTab === ProfileTab.PRIVATE}
         title="Private"
-        onClick={() => {setShielded(true); setVirtual(false)}}
+        onClick={() => {setCurrentProfileTab(ProfileTab.PRIVATE)}}
       >
         {p.private}
       </Tab>
       <Tab
-        active={!isShielded && isVirtual}
+        active={currentProfileTab === ProfileTab.VIRTUAL}
         title="Virtual"
-        onClick={() => {setShielded(false); setVirtual(true)}}
+        onClick={() => {setCurrentProfileTab(ProfileTab.VIRTUAL)}}
       >
         {p.virtual}
       </Tab>
