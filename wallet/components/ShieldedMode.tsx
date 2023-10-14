@@ -13,61 +13,38 @@ import React, {
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 
-export const ShieldedContext = createContext<{
+export const ProfileTabContext = createContext<{
   isShielded: boolean;
   setShielded: Dispatch<SetStateAction<boolean>>;
-}>({
-  isShielded: false,
-  setShielded() {},
-});
-
-export const VirtualContext = createContext<{
   isVirtual: boolean;
   setVirtual: Dispatch<SetStateAction<boolean>>;
 }>({
+  isShielded: false,
+  setShielded() {},
   isVirtual: false,
-  setVirtual() {},
+  setVirtual() {}
 });
 
-export function useShieldedApi() {
-  return useContext(ShieldedContext);
+export function useProfileTabApi() {
+  return useContext(ProfileTabContext);
 }
 
-export function useVirtualApi() {
-  return useContext(VirtualContext);
-}
-
-export function ShieldedProvider(p: { children: ReactNode }) {
+export function ProfileTabProvider(p: { children: ReactNode }) {
   const [isShielded, setShielded] = useState(false);
-  /*COMBINE ISVIRTUAL HERE */
-  const value = useMemo(() => ({ isShielded, setShielded }), [isShielded]);
+  const [isVirtual, setVirtual] = useState(false);
+  const value = useMemo(() => ({ isShielded, setShielded, isVirtual, setVirtual }), [isShielded, isVirtual]);
   return (
     <div
       className={classNames("min-h-screen", {
         "bg-black": isShielded,
         "text-white": isShielded,
+        "bg-orange-300": isVirtual,
+        "text-blue-800": isVirtual
       })}
     >
-      <ShieldedContext.Provider value={value}>
+      <ProfileTabContext.Provider value={value}>
         {p.children}
-      </ShieldedContext.Provider>
-    </div>
-  );
-}
-
-export function VirtualProvider(p: { children: ReactNode }) {
-  const [isVirtual, setVirtual] = useState(false);
-  const value = useMemo(() => ({ isVirtual, setVirtual }), [isVirtual]);
-  return (
-    <div
-      className={classNames("min-h-screen", {
-        "bg-orange-500": isVirtual,
-        "text-white": isVirtual,
-      })}
-    >
-      <VirtualContext.Provider value={value}>
-        {p.children}
-      </VirtualContext.Provider>
+      </ProfileTabContext.Provider>
     </div>
   );
 }
@@ -85,8 +62,7 @@ function Tab(p: TabProps) {
 }
 
 function TabGroup(p: { children: ReactNode }) {
-  const { isShielded } = useShieldedApi();
-  const { isVirtual } = useVirtualApi();
+  const { isShielded, isVirtual } = useProfileTabApi();
 
   const tabs =
     React.Children.map(p.children, (child) => {
@@ -109,7 +85,7 @@ function TabGroup(p: { children: ReactNode }) {
                 "border-b-10": !active,
                 "border-white": isShielded && !isVirtual,
                 "border-black": !isShielded && !isVirtual,
-                "border-blue-500": !isShielded && isVirtual,
+                "border-blue-800": !isShielded && isVirtual,
                 "border-t": active,
                 "border-t-10": active,
                 "border-x": active,
@@ -124,34 +100,35 @@ function TabGroup(p: { children: ReactNode }) {
         </Horizontal>
       </div>
       <div>{content}</div>
+      <div>Shielded: {isShielded.toString()}</div>
+      <div>Virtual: {isVirtual.toString()}</div>
     </div>
   );
 }
 
 export function ShieldedTabs(p: { public: ReactNode; private: ReactNode; virtual: ReactNode }) {
-  const { isShielded, setShielded } = useShieldedApi();
-  const { isVirtual, setVirtual } = useVirtualApi();
+  const { isShielded, setShielded, isVirtual, setVirtual } = useProfileTabApi();
 
   return (
     <TabGroup>
       <Tab
         active={!isShielded && !isVirtual}
         title="Public"
-        onClick={() => {setShielded(false); setVirtual(false); console.log("Shielded: ", isShielded); console.log("Virtual: ", isVirtual)}}
+        onClick={() => {setShielded(false); setVirtual(false)}}
       >
         {p.public}
       </Tab>
       <Tab
         active={isShielded && !isVirtual}
         title="Private"
-        onClick={() => {setShielded(true); setVirtual(false); console.log("Shielded: ", isShielded); console.log("Virtual: ", isVirtual)}}
+        onClick={() => {setShielded(true); setVirtual(false)}}
       >
         {p.private}
       </Tab>
       <Tab
         active={!isShielded && isVirtual}
         title="Virtual"
-        onClick={() => { console.log("Shielded: ", isShielded); setShielded(false); setVirtual(true); console.log("Virtual: ", isVirtual)}}
+        onClick={() => {setShielded(false); setVirtual(true)}}
       >
         {p.virtual}
       </Tab>

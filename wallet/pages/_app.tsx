@@ -14,7 +14,7 @@ import { sepolia, localhost, polygonZkEvmTestnet } from "wagmi/chains";
 import { mantle } from "@/config/mantle";
 import { Flowbite } from "flowbite-react";
 import { theme } from "@/styles/theme";
-import { ShieldedProvider } from "@/components/ShieldedMode";
+import { ProfileTabProvider } from "@/components/ShieldedMode";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { LayoutContext, PlainLayout } from "@/ui/LayoutProvider";
@@ -66,13 +66,13 @@ export default function App({ Component, pageProps }: AppProps) {
         chains={chains}
       >
         <Flowbite theme={{ theme }}>
-          <ShieldedProvider>
+          <ProfileTabProvider>
             <LayoutContext.Provider value={PlainLayout}>
               <ZrclibProvider>
                 <Component {...pageProps} />
               </ZrclibProvider>
             </LayoutContext.Provider>
-          </ShieldedProvider>
+          </ProfileTabProvider>
         </Flowbite>
       </RainbowKitProvider>
     </WagmiConfig>
