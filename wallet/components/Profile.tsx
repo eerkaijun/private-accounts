@@ -68,6 +68,34 @@ function AssetRow({
   );
 }
 
+/*THIS PART INCLUDE Virtual account available. These are examples, and probably
+should live in another file??*/
+const virtualAccountsCreated = [
+  {name: "Account1", balances: 300 },
+  {name: "Account2", balances: 500 },
+  {name: "Account3", balances: 800 },
+];
+
+function ChooseAccountLayout({
+
+  /* Create row to display virtualAccountsCreated. Can I refer to what is done in
+    AssetRow? Might need to understand how html style work.... */
+  return(
+    <div className="">
+    <h2>Virtual Accounts</h2>
+    <table className="">
+      <tbody>
+        {virtualAccountsCreated.map((account, index) => (
+          <tr key={index}>
+            <td>{account.name}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  )
+});
+
 function ProfileLayout({
   address,
   asset,
