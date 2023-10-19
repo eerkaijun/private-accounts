@@ -32,7 +32,7 @@ const virtualAccountsCreated: VirtualAccount[] = [
 // Dont think this is needed yet atm?
 // Could be required to pass VirtualAccount details to downstream..?
 
-export const VirtualAccountContext = createContext<{
+const VirtualAccountContext = createContext<{
   virtualAccount: VirtualAccount | undefined;
   setVirtualAccount: Dispatch<SetStateAction<VirtualAccount | undefined>>;
 }>({
@@ -78,22 +78,17 @@ function BackButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-export function VirtualAccountContextProvider(p: { children: ReactNode }) {
-  const [virtualAccount, setVirtualAccount] = useState<VirtualAccount | undefined>();
-  const value = useMemo(() => ({ virtualAccount, setVirtualAccount }), [virtualAccount]);
-  <VirtualAccountContext.Provider value ={value}>
-    {p.children}
-  </VirtualAccountContext.Provider>
-}
 
 export function ChooseAccountLayout() {
-  const { virtualAccount, setVirtualAccount } = useVirtualAccountApi();
+  const [virtualAccount, setVirtualAccount] = useState<VirtualAccount | undefined>();
+  const value = useMemo(() => ({ virtualAccount, setVirtualAccount }), [virtualAccount]);
 
   const handleBackClicked = useCallback(() => {
     setVirtualAccount && setVirtualAccount(undefined);  //why setVirtualAccount() would cause issue required 1 arguments, but 0 provided?
   }, [setVirtualAccount]);
   
   return (
+    <VirtualAccountContext.Provider value = {value}>
       <div>
         {virtualAccount && <BackButton onClick={handleBackClicked}/>}
 
@@ -105,6 +100,11 @@ export function ChooseAccountLayout() {
           </Horizontal>
           )}
       </div>
+    </VirtualAccountContext.Provider>
+      
+  );
+}
+
         //Address, asset, balances, chainId, pubkey, title is based on selected account.
       /*{virtualAccount && (
         <ProfileLayout
@@ -118,13 +118,3 @@ export function ChooseAccountLayout() {
           title={"Public Account"}
         />
       )}*/
-  );
-}
-
-
-export function VirtualProfileLayout() {  
-  return (
-    <VirtualAccountContextProvider p=<ChooseAccountLayout/> />
-
-  );
-}
