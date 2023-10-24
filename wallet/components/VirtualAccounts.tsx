@@ -12,6 +12,12 @@ import React, {
   } from "react";
 import { Horizontal } from "@/ui/Horizontal";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { AccountBalances } from "./providers/hooks/useBalances";
+import { ProfileLayout } from "./Profile";
+import { BigNumber } from "ethers";
+
+
+
 
 
 /*THIS PART INCLUDE Virtual account available. These are examples, and probably
@@ -78,8 +84,15 @@ function BackButton({ onClick }: { onClick: () => void }) {
   );
 }
 
-
-export function ChooseAccountLayout() {
+export function ChooseAccountLayout({
+  asset,
+  setAsset,
+  balances
+}: {
+  asset: string | undefined;
+  setAsset: (asset? : string) => void;
+  balances: Map<string, BigNumber>;
+}) {
   const [virtualAccount, setVirtualAccount] = useState<VirtualAccount | undefined>();
   const value = useMemo(() => ({ virtualAccount, setVirtualAccount }), [virtualAccount]);
 
@@ -95,9 +108,16 @@ export function ChooseAccountLayout() {
         {!virtualAccount && <AccountsTable/>}
 
         {virtualAccount && (
-          <Horizontal>
-            <div className="text-2xl mb-4">{virtualAccount.name}</div>
-          </Horizontal>
+            <ProfileLayout
+              address="0x1234"
+              asset={asset}
+              balances={balances}
+              chainId={31337}
+              isPrivate={false}
+              pubkey="0x123456789ABCDE"
+              setAsset={setAsset}
+              title={virtualAccount.name}
+            />
           )}
       </div>
     </VirtualAccountContext.Provider>
@@ -105,16 +125,12 @@ export function ChooseAccountLayout() {
   );
 }
 
+/*
+<Horizontal>
+<div className="text-2xl mb-4">{virtualAccount.name}</div>
+</Horizontal>
+*/
         //Address, asset, balances, chainId, pubkey, title is based on selected account.
       /*{virtualAccount && (
-        <ProfileLayout
-          address={address}
-          asset={asset}
-          balances={balances.publicBalances}
-          chainId={chainId}
-          isPrivate={false}
-          pubkey={pubkey}
-          setAsset={setAsset}
-          title={"Public Account"}
-        />
+
       )}*/

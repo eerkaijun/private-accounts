@@ -74,7 +74,7 @@ function AssetRow({
   );
 }
 
-function ProfileLayout({
+export function ProfileLayout({
   address,
   asset,
   balances,
@@ -250,7 +250,10 @@ export function Profile({
         />
       }
       virtual={
-        <ChooseAccountLayout/>
+        <ChooseAccountLayout
+          asset={asset}
+          balances={balances.privateBalances}
+          setAsset={setAsset}/>
       }
     
     ></ProfileTabs>
