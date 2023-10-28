@@ -43,8 +43,8 @@ export type AccountBalances = {
 //Inside privateBalances/publicBalances, they contain [address, balance] pair?
 const DAIaddr = "0x195907615FF6594b9b28CCF41328e22aF82f2c4B";
 const LUSDaddr = "0x3C93352D1c37c727463187c3364f8E23fA73c46f";
-const DAIval: BigNumber = BigNumber.from("10000000000");
-const LUSDval: BigNumber = BigNumber.from("50000900000")
+const DAIval: BigNumber = BigNumber.from("1000000000000000");
+const LUSDval: BigNumber = BigNumber.from("5008000000000000000000")
 
 const virtualBalances: Map<string, BigNumber> = new Map<string, BigNumber>()
 
