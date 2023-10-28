@@ -34,6 +34,20 @@ const virtualAccountsCreated: VirtualAccount[] = [
   {name: "Account3", balances: 800 },
 ];
 
+//balance (into profile) is of format AccountBalances:
+/*
+export type AccountBalances = {
+  privateBalances: Map<string, BigNumber>;
+  publicBalances: Map<string, BigNumber>;
+};*/
+//Inside privateBalances/publicBalances, they contain [address, balance] pair?
+const DAIaddr = "0x195907615FF6594b9b28CCF41328e22aF82f2c4B";
+const LUSDaddr = "0x3C93352D1c37c727463187c3364f8E23fA73c46f";
+const DAIval: BigNumber = BigNumber.from("10000000000");
+const LUSDval: BigNumber = BigNumber.from("50000900000")
+
+const virtualBalances: Map<string, BigNumber> = new Map<string, BigNumber>()
+
 
 // Dont think this is needed yet atm?
 // Could be required to pass VirtualAccount details to downstream..?
@@ -87,18 +101,26 @@ function BackButton({ onClick }: { onClick: () => void }) {
 export function ChooseAccountLayout({
   asset,
   setAsset,
-  balances
 }: {
   asset: string | undefined;
   setAsset: (asset? : string) => void;
-  balances: Map<string, BigNumber>;
 }) {
+  
+  //Sepolia "DAI"
+  virtualBalances.set(DAIaddr, DAIval);
+   //Sepolia "LUSD"
+  virtualBalances.set(LUSDaddr, LUSDval);
+  
+  
+  
   const [virtualAccount, setVirtualAccount] = useState<VirtualAccount | undefined>();
   const value = useMemo(() => ({ virtualAccount, setVirtualAccount }), [virtualAccount]);
 
   const handleBackClicked = useCallback(() => {
     setVirtualAccount && setVirtualAccount(undefined);  //why setVirtualAccount() would cause issue required 1 arguments, but 0 provided?
   }, [setVirtualAccount]);
+
+  console.log(virtualBalances);
   
   return (
     <VirtualAccountContext.Provider value = {value}>
@@ -109,10 +131,10 @@ export function ChooseAccountLayout({
 
         {virtualAccount && (
             <ProfileLayout
-              address="0x1234"
+              address="0xADDR1234"
               asset={asset}
-              balances={balances}
-              chainId={31337}
+              balances={virtualBalances}
+              chainId={11155111}
               isPrivate={false}
               pubkey="0x123456789ABCDE"
               setAsset={setAsset}

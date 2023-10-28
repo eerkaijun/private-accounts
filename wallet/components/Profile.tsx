@@ -187,6 +187,8 @@ export function ProfileLayout({
       {!asset && (
         <Vertical className="border-t-2">
           {entries.map(([address, balance]) => {
+            console.log(entries);
+            console.log({ chainId });
             const token = getTokenFromAddress(address, chainId);
             if (!token) return;
             return (
@@ -252,7 +254,6 @@ export function Profile({
       virtual={
         <ChooseAccountLayout
           asset={asset}
-          balances={balances.privateBalances}
           setAsset={setAsset}/>
       }
     
