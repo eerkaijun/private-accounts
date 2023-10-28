@@ -9,7 +9,7 @@ import { WalletActionButton } from "@/ui/WalletActionButton";
 import { Spacer } from "@/ui/Spacer";
 import { IconBaseProps } from "react-icons";
 import { BsFillEmojiSunglassesFill } from "react-icons/bs";
-import { ShieldedTabs } from "./ShieldedMode";
+import { ProfileTabs } from "./ShieldedMode";
 import { ReactNode, useCallback } from "react";
 import { Vertical } from "@/ui/Vertical";
 import { getTokenFromAddress } from "@/contracts/get_contract";
@@ -18,6 +18,12 @@ import { BigText } from "@/ui/BigText";
 import { formatAmount } from "@/utils";
 import { FaSadCry } from "react-icons/fa";
 import { AccountBalances } from "./providers/hooks/useBalances";
+
+import { ChooseAccountLayout } from "./VirtualAccounts";
+
+
+
+
 export function NormalizedSunglasses(p: IconBaseProps) {
   return (
     <div className={`h-${p.size} w-${p.size} p-[2px]`}>
@@ -68,7 +74,7 @@ function AssetRow({
   );
 }
 
-function ProfileLayout({
+export function ProfileLayout({
   address,
   asset,
   balances,
@@ -181,6 +187,8 @@ function ProfileLayout({
       {!asset && (
         <Vertical className="border-t-2">
           {entries.map(([address, balance]) => {
+            console.log(entries);
+            console.log({ chainId });
             const token = getTokenFromAddress(address, chainId);
             if (!token) return;
             return (
@@ -199,6 +207,8 @@ function ProfileLayout({
   );
 }
 
+
+
 export function Profile({
   pubkey,
   address,
@@ -216,7 +226,7 @@ export function Profile({
 }) {
   console.log("Profile:", { pubkey });
   return (
-    <ShieldedTabs
+    <ProfileTabs
       public={
         <ProfileLayout
           address={address}
@@ -241,6 +251,12 @@ export function Profile({
           title={"Private Account"}
         />
       }
-    ></ShieldedTabs>
+      virtual={
+        <ChooseAccountLayout
+          asset={asset}
+          setAsset={setAsset}/>
+      }
+    
+    ></ProfileTabs>
   );
 }
