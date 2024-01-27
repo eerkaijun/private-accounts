@@ -49,4 +49,4 @@ pnpm wallet
 
 ![architecture overview](private-accounts.png)
 
-The above diagram shows the current high level overview of the user flow, which will be constantly updated as new modules are being built out.
+The above diagram shows the current high level overview of the user flow, which will be constantly updated as new modules are being built out. Further discussions can be found at this [ETH research post](https://ethresear.ch/t/private-accounts-module-on-ethereum-without-underlying-protocol-changes/16297).
